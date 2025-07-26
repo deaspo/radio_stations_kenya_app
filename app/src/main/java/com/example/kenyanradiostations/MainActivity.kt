@@ -26,6 +26,7 @@ import coil.load
 import com.example.kenyanradiostations.databinding.ActivityMainBinding
 import com.google.android.gms.cast.MediaInfo
 import com.google.android.gms.cast.MediaMetadata
+import com.google.android.gms.cast.MediaStatus
 import com.google.android.gms.cast.framework.CastButtonFactory
 import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.CastSession
@@ -47,6 +48,7 @@ class MainActivity : AppCompatActivity() {
     private var castContext: CastContext? = null
     private var castSession: CastSession? = null
     private val sessionManagerListener = SessionManagerListenerImpl()
+    private var lastPlayedStation: RadioStation? = null
 
     private var localPlayer: ExoPlayer? = null
 
