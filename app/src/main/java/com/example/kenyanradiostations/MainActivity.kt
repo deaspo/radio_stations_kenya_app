@@ -1,7 +1,11 @@
 package com.example.kenyanradiostations
 
 import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.AudioManager
 import android.net.Uri
@@ -15,14 +19,18 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.media.app.NotificationCompat.MediaStyle
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.recyclerview.widget.GridLayoutManager
+import coil.imageLoader
 import coil.load
+import coil.request.ImageRequest
 import com.example.kenyanradiostations.databinding.ActivityMainBinding
 import com.google.android.gms.cast.MediaInfo
 import com.google.android.gms.cast.MediaMetadata
@@ -78,6 +86,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         askNotificationPermission()
+        createNotificationChannel()
 
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
@@ -102,6 +111,20 @@ class MainActivity : AppCompatActivity() {
             ) {
                 requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
+        }
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "Radio Playback"
+            val descriptionText = "Shows the currently playing radio station"
+            val importance = NotificationManager.IMPORTANCE_LOW // Low importance to be less intrusive
+            val channel = NotificationChannel("radio_playback_channel", name, importance).apply {
+                description = descriptionText
+            }
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
         }
     }
 
@@ -136,16 +159,22 @@ class MainActivity : AppCompatActivity() {
             binding.playerControlsContainer.root.visibility = View.VISIBLE
         } else {
             binding.playerControlsContainer.root.visibility = View.GONE
+            hidePlaybackNotification()
         }
     }
 
     private val playerListener = object : Player.Listener {
+        override fun onIsPlayingChanged(isPlaying: Boolean) {
+            if (isPlaying) {
+                // Show notification when playback starts
+                showPlaybackNotification(localPlayer!!)
+            } else {
+                // Hide notification when playback stops or is paused
+                hidePlaybackNotification()
+            }
+        }
+
         override fun onPlaybackStateChanged(playbackState: Int) {
-//            if (playbackState == Player.STATE_IDLE || playbackState == Player.STATE_ENDED) {
-//                binding.playerControlsContainer.root.visibility = View.GONE
-//            } else {
-//                binding.playerControlsContainer.root.visibility = View.VISIBLE
-//            }
             updatePlayerUiState()
         }
 
@@ -166,13 +195,6 @@ class MainActivity : AppCompatActivity() {
 
     @OptIn(UnstableApi::class)
     private fun setupPlayerControls() {
-        // Link the PlayerControlView directly to our local player instance
-//        binding.playerControlsContainer.playerView.player = localPlayer
-//
-//        binding.playerControlsContainer.closeButton.setOnClickListener {
-//            localPlayer?.stop()
-//            binding.playerControlsContainer.root.visibility = View.GONE
-//        }
         binding.playerControlsContainer.playPauseButton.setOnClickListener {
             if (castSession?.isConnected == true) {
                 // Control the remote player
@@ -508,6 +530,48 @@ class MainActivity : AppCompatActivity() {
                 Log.e("RadioApp", "Error fetching station details", e)
             }
         }
+    }
+
+    // Add these functions inside MainActivity.kt
+
+    private fun showPlaybackNotification(player: Player) {
+        val metadata = player.mediaMetadata
+        // We need a coroutine to fetch the album art bitmap
+        lifecycleScope.launch {
+            val largeIconBitmap = try {
+                val request = ImageRequest.Builder(this@MainActivity)
+                    .data(metadata.artworkUri)
+                    .allowHardware(false) // Required for notification bitmaps
+                    .build()
+                (imageLoader.execute(request).drawable as? android.graphics.drawable.BitmapDrawable)?.bitmap
+            } catch (e: Exception) {
+                null
+            }
+
+            // Create an intent that will open the app when the notification is tapped
+            val contentIntent = Intent(applicationContext, MainActivity::class.java)
+            val contentPendingIntent = PendingIntent.getActivity(
+                applicationContext, 0, contentIntent, PendingIntent.FLAG_IMMUTABLE
+            )
+
+            val notification = NotificationCompat.Builder(this@MainActivity, "radio_playback_channel")
+                .setSmallIcon(R.drawable.ic_radio_icon)
+                .setContentTitle(metadata.title)
+                .setContentText(metadata.artist) // We use artist for the signal
+                .setLargeIcon(largeIconBitmap)
+                .setContentIntent(contentPendingIntent)
+                .setOngoing(true) // Makes the notification non-swipeable while playing
+                .setStyle(MediaStyle().setShowActionsInCompactView()) // Use MediaStyle for the look
+                .build()
+
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.notify(1, notification)
+        }
+    }
+
+    private fun hidePlaybackNotification() {
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.cancel(1)
     }
 
     // Lifecycle methods for Cast session management
