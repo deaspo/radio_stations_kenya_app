@@ -63,6 +63,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+    private val remotePlayerCallback = object : com.google.android.gms.cast.framework.media.RemoteMediaClient.Callback() {
+        override fun onStatusUpdated() {
+            updatePlayerUiState()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -105,13 +111,40 @@ class MainActivity : AppCompatActivity() {
         super.onStop()
     }
 
+    private fun updatePlayerUiState() {
+        val isPlaying: Boolean
+        if (castSession?.isConnected == true) {
+            val remoteState = castSession?.remoteMediaClient?.playerState
+            isPlaying = (remoteState == MediaStatus.PLAYER_STATE_PLAYING || remoteState == MediaStatus.PLAYER_STATE_BUFFERING)
+        } else {
+            isPlaying = localPlayer?.isPlaying ?: false
+        }
+
+        if (isPlaying) {
+            binding.playerControlsContainer.playPauseButton.setImageResource(R.drawable.ic_pause)
+        } else {
+            binding.playerControlsContainer.playPauseButton.setImageResource(R.drawable.ic_play)
+        }
+
+        // Ensure the controls are visible if we have an active session
+        val localIsActive = localPlayer?.playbackState != Player.STATE_IDLE
+        val remoteIsActive = castSession?.remoteMediaClient?.hasMediaSession() == true
+
+        if (localIsActive || remoteIsActive) {
+            binding.playerControlsContainer.root.visibility = View.VISIBLE
+        } else {
+            binding.playerControlsContainer.root.visibility = View.GONE
+        }
+    }
+
     private val playerListener = object : Player.Listener {
         override fun onPlaybackStateChanged(playbackState: Int) {
-            if (playbackState == Player.STATE_IDLE || playbackState == Player.STATE_ENDED) {
-                binding.playerControlsContainer.root.visibility = View.GONE
-            } else {
-                binding.playerControlsContainer.root.visibility = View.VISIBLE
-            }
+//            if (playbackState == Player.STATE_IDLE || playbackState == Player.STATE_ENDED) {
+//                binding.playerControlsContainer.root.visibility = View.GONE
+//            } else {
+//                binding.playerControlsContainer.root.visibility = View.VISIBLE
+//            }
+            updatePlayerUiState()
         }
 
         override fun onMediaMetadataChanged(mediaMetadata: androidx.media3.common.MediaMetadata) {
@@ -132,10 +165,36 @@ class MainActivity : AppCompatActivity() {
     @OptIn(UnstableApi::class)
     private fun setupPlayerControls() {
         // Link the PlayerControlView directly to our local player instance
-        binding.playerControlsContainer.playerView.player = localPlayer
+//        binding.playerControlsContainer.playerView.player = localPlayer
+//
+//        binding.playerControlsContainer.closeButton.setOnClickListener {
+//            localPlayer?.stop()
+//            binding.playerControlsContainer.root.visibility = View.GONE
+//        }
+        binding.playerControlsContainer.playPauseButton.setOnClickListener {
+            if (castSession?.isConnected == true) {
+                // Control the remote player
+                val remoteClient = castSession?.remoteMediaClient
+                if (remoteClient?.isPlaying == true) {
+                    remoteClient.pause()
+                } else {
+                    remoteClient?.play()
+                }
+            } else {
+                // Control the local player
+                if (localPlayer?.isPlaying == true) {
+                    localPlayer?.pause()
+                } else {
+                    lastPlayedStation?.let {
+                        playStation(it)
+                    }
+                }
+            }
+        }
 
         binding.playerControlsContainer.closeButton.setOnClickListener {
             localPlayer?.stop()
+            castSession?.remoteMediaClient?.stop()
             binding.playerControlsContainer.root.visibility = View.GONE
         }
 
@@ -283,16 +342,26 @@ class MainActivity : AppCompatActivity() {
                     .setMetadata(castMetadata)
                     .build()
 
-                // Load the media on the cast device. On success, stop the local player.
+                // Register the remote callback and load media
+                session.remoteMediaClient?.registerCallback(remotePlayerCallback)
                 session.remoteMediaClient?.load(mediaInfo, true)?.setResultCallback {
                     if (it.status.isSuccess) {
-                        localPlayer?.stop()
+                        localPlayer?.stop() // Stop local audio but keep UI managed
                     }
                 }
+
+//                // Load the media on the cast device. On success, stop the local player.
+//                session.remoteMediaClient?.load(mediaInfo, true)?.setResultCallback {
+//                    if (it.status.isSuccess) {
+//                        localPlayer?.stop()
+//                    }
+//                }
             }
 
             castSession = session
-            invalidateOptionsMenu() // Refresh menu to show cast icon state
+            session.remoteMediaClient?.registerCallback(remotePlayerCallback) // Also register here for new sessions
+            invalidateOptionsMenu()
+            updatePlayerUiState() // Update UI immediately
         }
 
         override fun onSessionResumed(session: CastSession, wasSuspended: Boolean) {
@@ -338,11 +407,12 @@ class MainActivity : AppCompatActivity() {
                 localPlayer?.play()
             }
 
-
+            remoteMediaClient?.unregisterCallback(remotePlayerCallback) // Unregister the callback
             if (session == castSession) {
                 castSession = null
             }
             invalidateOptionsMenu()
+            updatePlayerUiState() // Update UI immediately
         }
 
         override fun onSessionSuspended(session: CastSession, reason: Int) {
@@ -378,6 +448,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun playStation(station: RadioStation) {
+        // Stop any current playback immediately to ensure a clean state.
+        if (castSession?.isConnected == true) {
+            // If casting, stop the remote player.
+            castSession?.remoteMediaClient?.stop()
+        } else {
+            // If playing locally, stop the local player.
+            localPlayer?.stop()
+        }
+
+        this.lastPlayedStation = station
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val apiUrl = "https://api.instant.audio/data/streams/81/${station.id}"
