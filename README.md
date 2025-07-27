@@ -23,13 +23,9 @@ The app works in two main stages:
 
 *(Replace these placeholders with actual screenshots of your app)*
 
-| Main Screen | Player Controls |
-| :---- | :---- |
-| \[Screenshot of the station grid\] | \[Screenshot of the bottom player overlay\] |
-
-| Notification |
-| :---- |
-| \[Screenshot of the media notification\] |
+| Main Screen | Player Controls | Notification |
+| :---- | :---- | :---- |
+| <img width="240" height="2529" alt="image" src="https://github.com/user-attachments/assets/17a8d29b-c9db-43cf-a4c0-c422c9b2f14e" />| <img width="240" height="2529" alt="image" src="https://github.com/user-attachments/assets/7160782d-0472-4e66-a676-545501ffdfde" />| <img width="240" height="2529" alt="image" src="https://github.com/user-attachments/assets/0ef54a57-8b22-4ecc-a76a-e5f6ed6ebfba" /> |
 
 ## **Building from Source**
 
