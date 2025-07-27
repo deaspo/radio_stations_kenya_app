@@ -53,4 +53,4 @@ Under the following terms:
 * **NonCommercial (NC):** You may not use the material for commercial purposes.
 * **ShareAlike (SA):** If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.
 
-For the full license text, see [LICENSE.md](http://docs.google.com/LICENSE.md) or visit [creativecommons.org/licenses/by-nc-sa/4.0/](https://creativecommons.org/licenses/by-nc-sa/4.0/).
+For the full license text, see [LICENSE.md](https://github.com/deaspo/radio_stations_kenya_app/blob/devel/LICENSE) or visit [creativecommons.org/licenses/by-nc-sa/4.0/](https://creativecommons.org/licenses/by-nc-sa/4.0/).
