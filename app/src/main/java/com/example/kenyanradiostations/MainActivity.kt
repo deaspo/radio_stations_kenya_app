@@ -147,7 +147,7 @@ class MainActivity : AppCompatActivity() {
                         mediaMetadata.putString(MediaMetadata.KEY_SUBTITLE, stationDetails.signal)
                         mediaMetadata.addImage(WebImage(Uri.parse(stationDetails.logoUrl)))
                         val mediaInfo = MediaInfo.Builder(stationDetails.streamUrl)
-                            .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+                            .setStreamType(MediaInfo.STREAM_TYPE_LIVE)
                             .setContentType("audio/aac").setMetadata(mediaMetadata).build()
                         castSession?.remoteMediaClient?.load(mediaInfo, true)
                     } else {
@@ -280,7 +280,7 @@ class MainActivity : AppCompatActivity() {
                 mediaMetadata.artworkUri?.let { castMetadata.addImage(WebImage(it)) }
 
                 val mediaInfo = MediaInfo.Builder(currentItem.mediaId ?: "")
-                    .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+                    .setStreamType(MediaInfo.STREAM_TYPE_LIVE)
                     .setContentType("audio/aac")
                     .setMetadata(castMetadata)
                     .build()
