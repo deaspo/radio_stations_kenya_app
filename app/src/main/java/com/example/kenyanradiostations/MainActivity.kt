@@ -141,7 +141,6 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     if (castSession != null && castSession!!.isConnected) {
-                        //localPlayer?.stop() // Stop local playback before casting
                         mediaController?.stop()
                         val mediaMetadata = MediaMetadata(MediaMetadata.MEDIA_TYPE_MUSIC_TRACK)
                         mediaMetadata.putString(MediaMetadata.KEY_TITLE, stationDetails.title)
@@ -266,12 +265,72 @@ class MainActivity : AppCompatActivity() {
     }
 
     private inner class SessionManagerListenerImpl : SessionManagerListener<CastSession> {
+        private fun transferToRemotePlayer(session: CastSession) {
+            // Check if the service player is active via the controller
+            val playingLocally = mediaController?.isPlaying == true
+            if (playingLocally) {
+                val currentItem = mediaController?.currentMediaItem ?: return
+
+                val mediaMetadata = currentItem.mediaMetadata
+
+                val castMetadata = MediaMetadata(MediaMetadata.MEDIA_TYPE_MUSIC_TRACK)
+                castMetadata.putString(MediaMetadata.KEY_TITLE, mediaMetadata.title.toString())
+                castMetadata.putString(MediaMetadata.KEY_SUBTITLE, mediaMetadata.artist.toString())
+
+                mediaMetadata.artworkUri?.let { castMetadata.addImage(WebImage(it)) }
+
+                val mediaInfo = MediaInfo.Builder(currentItem.mediaId ?: "")
+                    .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+                    .setContentType("audio/aac")
+                    .setMetadata(castMetadata)
+                    .build()
+
+                // Load the media, and on success, explicitly play and then stop the service player.
+                session.remoteMediaClient?.load(mediaInfo, false)?.setResultCallback { result ->
+                    if (result.status.isSuccess) {
+                        session.remoteMediaClient?.play()
+                        // Tell the service to stop playback
+                        mediaController?.stop()
+                    }
+                }
+            }
+        }
+
+        private fun transferToLocalMediaPlayer(session: CastSession) {
+            val remoteMediaClient = session.remoteMediaClient
+            val playingRemotely =
+                remoteMediaClient?.isPlaying == true || remoteMediaClient?.isBuffering == true
+
+            if (playingRemotely) {
+                val mediaInfo = remoteMediaClient?.mediaInfo ?: return
+                val castMetadata = mediaInfo.metadata
+                val localMetadata = androidx.media3.common.MediaMetadata.Builder()
+                    .setTitle(castMetadata?.getString(MediaMetadata.KEY_TITLE))
+                    .setArtist(castMetadata?.getString(MediaMetadata.KEY_SUBTITLE))
+                    .setArtworkUri(castMetadata?.images?.firstOrNull()?.url)
+                    .build()
+
+                val mediaItem = MediaItem.Builder()
+                    .setUri(mediaInfo.contentId)
+                    .setMediaId(mediaInfo.contentId)
+                    .setMediaMetadata(localMetadata)
+                    .build()
+
+                // Use the controller to send commands to the service
+                mediaController?.setMediaItem(mediaItem)
+                mediaController?.prepare()
+                mediaController?.play()
+            }
+        }
+
         override fun onSessionStarted(session: CastSession, sessionId: String) {
+            transferToRemotePlayer(session)
             castSession = session
             invalidateOptionsMenu()
         }
 
         override fun onSessionResumed(session: CastSession, wasSuspended: Boolean) {
+            transferToRemotePlayer(session)
             castSession = session
             invalidateOptionsMenu()
         }
@@ -283,7 +342,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onSessionEnded(session: CastSession, error: Int) {
-            //remoteMediaClient?.unregisterCallback(remotePlayerCallback) // Unregister the callback
+            transferToLocalMediaPlayer(session)
             if (session == castSession) {
                 castSession = null
             }
