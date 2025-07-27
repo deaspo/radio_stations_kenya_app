@@ -77,6 +77,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/player_view" />
 
+        <androidx.mediarouter.app.MediaRouteButton
+            android:id="@+id/cast_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/volume_icon"
+            app:layout_constraintBottom_toBottomOf="@id/volume_icon"/>
+
         <SeekBar
             android:id="@+id/volume_seekbar"
             android:layout_width="0dp"
@@ -84,9 +93,10 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             app:layout_constraintBottom_toBottomOf="@id/volume_icon"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/cast_button"
             app:layout_constraintStart_toEndOf="@id/volume_icon"
             app:layout_constraintTop_toTopOf="@id/volume_icon" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>
