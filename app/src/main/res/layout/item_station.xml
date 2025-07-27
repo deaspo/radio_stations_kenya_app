@@ -16,6 +16,7 @@
             android:id="@+id/station_logo"
             android:layout_width="80dp"
             android:layout_height="80dp"
+            android:contentDescription="Radio Station Logo"
             android:scaleType="centerCrop"
             tools:src="@tools:sample/avatars" />
 

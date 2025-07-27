@@ -17,6 +17,7 @@
             android:id="@+id/station_logo_player"
             android:layout_width="56dp"
             android:layout_height="56dp"
+            android:contentDescription="Station Logo Player"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@tools:sample/avatars" />
@@ -70,6 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:contentDescription="Volume Icon"
             android:src="@drawable/ic_volume_up"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
