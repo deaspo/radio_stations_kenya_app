@@ -11,7 +11,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
 import android.view.View
 import android.widget.SeekBar
 import android.widget.Toast
@@ -103,6 +102,9 @@ class MainActivity : AppCompatActivity() {
 
     @OptIn(UnstableApi::class)
     private fun setupPlayerControls() {
+        // Set up the new MediaRouteButton from the player controls layout
+        CastButtonFactory.setUpMediaRouteButton(applicationContext, binding.playerControlsContainer.castButton)
+
         binding.playerControlsContainer.closeButton.setOnClickListener {
             mediaController?.stop()
         }
@@ -307,15 +309,6 @@ class MainActivity : AppCompatActivity() {
         override fun onSessionResumeFailed(session: CastSession, error: Int) {
             // Empty implementation is fine
         }
-    }
-
-    // Setup Cast button in the toolbar
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu)
-        CastButtonFactory.setUpMediaRouteButton(
-            applicationContext, menu, R.id.media_route_menu_item
-        )
-        return true
     }
 
     private fun askNotificationPermission() {
