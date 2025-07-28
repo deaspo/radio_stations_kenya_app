@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.AudioManager
 import android.net.Uri
@@ -87,6 +88,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Check if onboarding is complete BEFORE any other setup
+        val sharedPrefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val onboardingComplete = sharedPrefs.getBoolean("onboarding_complete", false)
+
+        if (!onboardingComplete) {
+            // User needs to see the onboarding flow.
+            // Launch OnboardingActivity and finish this one.
+            startActivity(Intent(this, OnboardingActivity::class.java))
+            finish()
+            return // Important: return here to stop further execution of this onCreate
+        }
+        // --- Onboarding is complete, proceed with normal app startup ---
+
         // Install the splash screen. This MUST be called before super.onCreate() or setContentView().
         installSplashScreen().apply {
             // Keep the splash screen on screen until isDataReady is true.
