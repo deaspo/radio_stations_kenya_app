@@ -18,6 +18,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
@@ -42,7 +43,6 @@ import org.json.JSONObject
 import org.jsoup.Jsoup
 import java.net.URL
 
-
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -53,6 +53,8 @@ class MainActivity : AppCompatActivity() {
     private var castContext: CastContext? = null
     private var castSession: CastSession? = null
     private val sessionManagerListener = SessionManagerListenerImpl()
+
+    private var isDataReady = false
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
@@ -85,7 +87,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Install the splash screen. This MUST be called before super.onCreate() or setContentView().
+        installSplashScreen().apply {
+            // Keep the splash screen on screen until isDataReady is true.
+            setKeepOnScreenCondition { !isDataReady }
+        }
+
         super.onCreate(savedInstanceState)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
@@ -207,6 +216,8 @@ class MainActivity : AppCompatActivity() {
                         // We will handle playback here
                         playStation(station)
                     }
+                    // Data is loaded and the adapter is set. It's time to dismiss the splash screen.
+                    isDataReady = true
                 }
             } catch (e: Exception) {
                 // Handle exceptions (e.g., no network)
@@ -215,6 +226,8 @@ class MainActivity : AppCompatActivity() {
                     binding.progressBar.visibility = View.GONE
                     // Show an error message
                 }
+                // Also dismiss the splash screen on error to not get stuck.
+                isDataReady = true
             }
         }
     }
