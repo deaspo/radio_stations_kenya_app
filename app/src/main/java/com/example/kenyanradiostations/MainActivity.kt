@@ -37,6 +37,9 @@ import com.google.android.gms.cast.framework.CastSession
 import com.google.android.gms.cast.framework.SessionManagerListener
 import com.google.android.gms.common.images.WebImage
 import com.google.common.util.concurrent.ListenableFuture
+import com.google.firebase.Firebase
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.analytics
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -45,6 +48,8 @@ import org.jsoup.Jsoup
 import java.net.URL
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var analytics: FirebaseAnalytics
 
     private lateinit var binding: ActivityMainBinding
 
@@ -88,6 +93,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Install the splash screen. This MUST be called before super.onCreate() or setContentView().
+        installSplashScreen().apply {
+            // Keep the splash screen on screen until isDataReady is true.
+            setKeepOnScreenCondition { !isDataReady }
+        }
+
+        super.onCreate(savedInstanceState)
+
         // Check if onboarding is complete BEFORE any other setup
         val sharedPrefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         val onboardingComplete = sharedPrefs.getBoolean("onboarding_complete", false)
@@ -101,13 +114,8 @@ class MainActivity : AppCompatActivity() {
         }
         // --- Onboarding is complete, proceed with normal app startup ---
 
-        // Install the splash screen. This MUST be called before super.onCreate() or setContentView().
-        installSplashScreen().apply {
-            // Keep the splash screen on screen until isDataReady is true.
-            setKeepOnScreenCondition { !isDataReady }
-        }
-
-        super.onCreate(savedInstanceState)
+        // Obtain the FirebaseAnalytics instance.
+        analytics = Firebase.analytics
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
