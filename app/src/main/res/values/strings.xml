@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Radio Diaspora</string>
+    <string name="welcome_title">Welcome Title</string>
+    <string name="welcome_message">This is the descriptive message for the onboarding screen.</string>
 </resources>
