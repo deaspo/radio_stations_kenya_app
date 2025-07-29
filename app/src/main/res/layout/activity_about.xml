@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:textAppearance="?attr/textAppearanceBody2"
-        tools:text="@string/app_version" />
+        android:text="@string/app_version" />
 
     <TextView
         android:layout_width="wrap_content"
