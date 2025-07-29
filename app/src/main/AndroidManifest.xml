@@ -31,6 +31,14 @@
         <activity
             android:name=".OnboardingActivity"
             android:exported="false" />
+        <!-- About Activity -->
+        <activity
+            android:name=".AboutActivity"
+            android:exported="false" />
+        <!-- Settings Activity -->
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false" />
         <!-- Background Playback Service -->
         <service
             android:name=".RadioService"
