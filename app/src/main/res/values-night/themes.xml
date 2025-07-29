@@ -3,6 +3,12 @@
     <style name="Base.Theme.KenyanRadioStations" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <!-- Primary brand color. -->
+        <item name="colorOnPrimary">@color/black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorOnSecondary">@color/white</item>
+
+<!--        <item name="android:toolbarStyle">@style/ThemeOverlay.MaterialComponents.ActionBar</item>-->
     </style>
 
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
