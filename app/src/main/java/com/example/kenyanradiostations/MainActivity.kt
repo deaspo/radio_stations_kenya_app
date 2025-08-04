@@ -357,16 +357,29 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        private fun setupCastDeviceName(session: CastSession) {
+            // Show device name in the player controls
+            val deviceName = session.castDevice?.friendlyName
+            if (deviceName != null) {
+                binding.playerControlsContainer.castDeviceName.text = "$deviceName"
+                binding.playerControlsContainer.castDeviceName.visibility = View.VISIBLE
+            } else {
+                binding.playerControlsContainer.castDeviceName.visibility = View.GONE
+            }
+        }
+
         override fun onSessionStarted(session: CastSession, sessionId: String) {
             transferToRemotePlayer(session)
             castSession = session
             invalidateOptionsMenu()
+            setupCastDeviceName(session)
         }
 
         override fun onSessionResumed(session: CastSession, wasSuspended: Boolean) {
             transferToRemotePlayer(session)
             castSession = session
             invalidateOptionsMenu()
+            setupCastDeviceName(session)
         }
 
         // THIS IS THE NEWLY ADDED, REQUIRED METHOD
