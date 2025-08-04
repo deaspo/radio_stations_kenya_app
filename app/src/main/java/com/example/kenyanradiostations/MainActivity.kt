@@ -162,6 +162,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun playStation(station: RadioStation) {
+        // Show the player overlay immediately with basic info from the grid
+        // This gives the user instant feedback.
+        binding.playerControlsContainer.root.visibility = View.VISIBLE
+        binding.playerControlsContainer.stationNamePlayer.text = station.name
+        binding.playerControlsContainer.stationSignalPlayer.text = "Loading..." // Placeholder
+        binding.playerControlsContainer.stationLogoPlayer.load(station.logoUrl) {
+            placeholder(R.drawable.ic_radio_icon)
+        }
+
+        // The PlayerControlView will automatically show a spinner because we will
+        // soon tell the player to prepare, which puts it in a BUFFERING state.
+
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val apiUrl = "https://api.instant.audio/data/streams/81/${station.id}"
