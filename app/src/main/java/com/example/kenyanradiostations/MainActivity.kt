@@ -15,7 +15,6 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-//import android.widget.SeekBar
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
@@ -144,35 +143,16 @@ class MainActivity : AppCompatActivity() {
         binding.playerControlsContainer.closeButton.setOnClickListener {
             mediaController?.stop()
         }
-
-        // Volume SeekBar setup
-//        val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
-//        val currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
-//        binding.playerControlsContainer.volumeSeekbar.max = maxVolume
-//        binding.playerControlsContainer.volumeSeekbar.progress = currentVolume
-//        binding.playerControlsContainer.volumeSeekbar.setOnSeekBarChangeListener(object :
-//            SeekBar.OnSeekBarChangeListener {
-//            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-//                if (fromUser) audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, progress, 0)
-//            }
-//
-//            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-//            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-//        })
     }
 
     private fun playStation(station: RadioStation) {
         // Show the player overlay immediately with basic info from the grid
-        // This gives the user instant feedback.
         binding.playerControlsContainer.root.visibility = View.VISIBLE
         binding.playerControlsContainer.stationNamePlayer.text = station.name
         binding.playerControlsContainer.stationSignalPlayer.text = "Loading..." // Placeholder
         binding.playerControlsContainer.stationLogoPlayer.load(station.logoUrl) {
             placeholder(R.drawable.ic_radio_icon)
         }
-
-        // The PlayerControlView will automatically show a spinner because we will
-        // soon tell the player to prepare, which puts it in a BUFFERING state.
 
         lifecycleScope.launch(Dispatchers.IO) {
             try {
