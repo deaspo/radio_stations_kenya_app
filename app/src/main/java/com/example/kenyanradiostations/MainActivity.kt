@@ -361,7 +361,7 @@ class MainActivity : AppCompatActivity() {
             // Show device name in the player controls
             val deviceName = session.castDevice?.friendlyName
             if (deviceName != null) {
-                binding.playerControlsContainer.castDeviceName.text = "$deviceName"
+                binding.playerControlsContainer.castDeviceName.text = "Playing on $deviceName"
                 binding.playerControlsContainer.castDeviceName.visibility = View.VISIBLE
             } else {
                 binding.playerControlsContainer.castDeviceName.visibility = View.GONE
