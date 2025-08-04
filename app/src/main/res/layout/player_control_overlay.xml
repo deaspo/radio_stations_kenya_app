@@ -66,36 +66,36 @@
             app:show_timeout="0"
             app:show_vr_button="false" />
 
-        <ImageView
-            android:id="@+id/volume_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:contentDescription="Volume Icon"
-            android:src="@drawable/ic_volume_up"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/player_view" />
+        <!--        <ImageView-->
+        <!--            android:id="@+id/volume_icon"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginStart="16dp"-->
+        <!--            android:contentDescription="Volume Icon"-->
+        <!--            android:src="@drawable/ic_volume_up"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toBottomOf="@id/player_view" />-->
 
         <androidx.mediarouter.app.MediaRouteButton
             android:id="@+id/cast_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/volume_icon"
-            app:layout_constraintBottom_toBottomOf="@id/volume_icon"/>
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/player_view" />
 
-        <SeekBar
-            android:id="@+id/volume_seekbar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintBottom_toBottomOf="@id/volume_icon"
-            app:layout_constraintEnd_toStartOf="@id/cast_button"
-            app:layout_constraintStart_toEndOf="@id/volume_icon"
-            app:layout_constraintTop_toTopOf="@id/volume_icon" />
+        <!--        <SeekBar-->
+        <!--            android:id="@+id/volume_seekbar"-->
+        <!--            android:layout_width="0dp"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginStart="16dp"-->
+        <!--            android:layout_marginEnd="16dp"-->
+        <!--            app:layout_constraintBottom_toBottomOf="@id/volume_icon"-->
+        <!--            app:layout_constraintEnd_toStartOf="@id/cast_button"-->
+        <!--            app:layout_constraintStart_toEndOf="@id/volume_icon"-->
+        <!--            app:layout_constraintTop_toTopOf="@id/volume_icon" />-->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

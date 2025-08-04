@@ -15,7 +15,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.SeekBar
+//import android.widget.SeekBar
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
@@ -136,26 +136,29 @@ class MainActivity : AppCompatActivity() {
     @OptIn(UnstableApi::class)
     private fun setupPlayerControls() {
         // Set up the new MediaRouteButton from the player controls layout
-        CastButtonFactory.setUpMediaRouteButton(applicationContext, binding.playerControlsContainer.castButton)
+        CastButtonFactory.setUpMediaRouteButton(
+            applicationContext,
+            binding.playerControlsContainer.castButton
+        )
 
         binding.playerControlsContainer.closeButton.setOnClickListener {
             mediaController?.stop()
         }
 
         // Volume SeekBar setup
-        val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
-        val currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
-        binding.playerControlsContainer.volumeSeekbar.max = maxVolume
-        binding.playerControlsContainer.volumeSeekbar.progress = currentVolume
-        binding.playerControlsContainer.volumeSeekbar.setOnSeekBarChangeListener(object :
-            SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (fromUser) audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, progress, 0)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
+//        val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+//        val currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
+//        binding.playerControlsContainer.volumeSeekbar.max = maxVolume
+//        binding.playerControlsContainer.volumeSeekbar.progress = currentVolume
+//        binding.playerControlsContainer.volumeSeekbar.setOnSeekBarChangeListener(object :
+//            SeekBar.OnSeekBarChangeListener {
+//            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+//                if (fromUser) audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, progress, 0)
+//            }
+//
+//            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+//            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+//        })
     }
 
     private fun playStation(station: RadioStation) {
@@ -174,7 +177,7 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     if (castSession != null && castSession!!.isConnected) {
-                        mediaController?.stop()
+                        mediaController?.volume = 0f // Set volume to 0 for casting
                         val mediaMetadata = MediaMetadata(MediaMetadata.MEDIA_TYPE_MUSIC_TRACK)
                         mediaMetadata.putString(MediaMetadata.KEY_TITLE, stationDetails.title)
                         mediaMetadata.putString(MediaMetadata.KEY_SUBTITLE, stationDetails.signal)
@@ -184,6 +187,7 @@ class MainActivity : AppCompatActivity() {
                             .setContentType("audio/aac").setMetadata(mediaMetadata).build()
                         castSession?.remoteMediaClient?.load(mediaInfo, true)
                     } else {
+                        mediaController?.volume = 1f // Ensure local player is unmuted
                         val mediaItem = MediaItem.Builder()
                             .setUri(stationDetails.streamUrl)
                             .setMediaId(stationDetails.streamUrl)
@@ -308,6 +312,8 @@ class MainActivity : AppCompatActivity() {
             if (playingLocally) {
                 val currentItem = mediaController?.currentMediaItem ?: return
 
+                mediaController?.volume = 0f // Mute the local player
+
                 val mediaMetadata = currentItem.mediaMetadata
 
                 val castMetadata = MediaMetadata(MediaMetadata.MEDIA_TYPE_MUSIC_TRACK)
@@ -316,7 +322,7 @@ class MainActivity : AppCompatActivity() {
 
                 mediaMetadata.artworkUri?.let { castMetadata.addImage(WebImage(it)) }
 
-                val mediaInfo = MediaInfo.Builder(currentItem.mediaId ?: "")
+                val mediaInfo = MediaInfo.Builder(currentItem.mediaId)
                     .setStreamType(MediaInfo.STREAM_TYPE_LIVE)
                     .setContentType("audio/aac")
                     .setMetadata(castMetadata)
@@ -326,14 +332,13 @@ class MainActivity : AppCompatActivity() {
                 session.remoteMediaClient?.load(mediaInfo, false)?.setResultCallback { result ->
                     if (result.status.isSuccess) {
                         session.remoteMediaClient?.play()
-                        // Tell the service to stop playback
-                        mediaController?.stop()
                     }
                 }
             }
         }
 
         private fun transferToLocalMediaPlayer(session: CastSession) {
+            mediaController?.volume = 1f // Restore volume
             val remoteMediaClient = session.remoteMediaClient
             val playingRemotely =
                 remoteMediaClient?.isPlaying == true || remoteMediaClient?.isBuffering == true
@@ -419,10 +424,12 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this, SettingsActivity::class.java))
                 true
             }
+
             R.id.action_about -> {
                 startActivity(Intent(this, AboutActivity::class.java))
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -456,7 +463,8 @@ class MainActivity : AppCompatActivity() {
     @OptIn(UnstableApi::class)
     private fun initializeController() {
         val sessionToken = SessionToken(this, ComponentName(this, RadioService::class.java))
-        val controllerFuture: ListenableFuture<MediaController> = MediaController.Builder(this, sessionToken).buildAsync()
+        val controllerFuture: ListenableFuture<MediaController> =
+            MediaController.Builder(this, sessionToken).buildAsync()
         controllerFuture.addListener({
             mediaController = controllerFuture.get()
             binding.playerControlsContainer.playerView.player = mediaController
