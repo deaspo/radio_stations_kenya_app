@@ -1,25 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+    The mini player.
+
+    The Media3 PlayerControlView that used to sit here was built for video: it
+    brings a timeline, a seek bar and a position label, none of which mean
+    anything for a live stream, and it could not be laid out alongside the
+    record and cast buttons without crowding. It has been replaced by an
+    explicit play/pause button, which also lets the buffering spinner sit
+    exactly where the user is already looking.
+
+    The whole card is clickable and opens the full-screen player; the handle at
+    the top and the chevron are the cue that it does.
+-->
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Material3.CardView.Elevated"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
-    app:cardElevation="8dp">
+    app:cardBackgroundColor="?attr/colorSurfaceVariant"
+    app:cardElevation="12dp"
+    app:shapeAppearanceOverlay="@style/ShapeAppearance.App.PlayerSheet">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/player_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp">
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="8dp">
 
-        <ImageView
-            android:id="@+id/station_logo_player"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:contentDescription="Station Logo Player"
+        <View
+            android:id="@+id/sheet_handle"
+            android:layout_width="32dp"
+            android:layout_height="4dp"
+            android:alpha="0.4"
+            android:background="@drawable/bg_sheet_handle"
+            android:importantForAccessibility="no"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/station_logo_player"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="10dp"
+            android:background="?attr/colorSurface"
+            android:contentDescription="@string/player_artwork"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sheet_handle"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.App.LogoSmall"
             tools:src="@tools:sample/avatars" />
 
         <TextView
@@ -27,8 +63,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:textAppearance="?attr/textAppearanceTitleMedium"
-            app:layout_constraintEnd_toStartOf="@id/close_button"
+            android:textColor="?attr/colorOnSurface"
+            app:layout_constraintEnd_toStartOf="@id/button_expand"
             app:layout_constraintStart_toEndOf="@id/station_logo_player"
             app:layout_constraintTop_toTopOf="@id/station_logo_player"
             tools:text="Classic 105" />
@@ -37,60 +76,136 @@
             android:id="@+id/station_signal_player"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:drawablePadding="6dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textColor="?attr/colorOnSurfaceVariant"
             app:layout_constraintEnd_toEndOf="@id/station_name_player"
             app:layout_constraintStart_toStartOf="@id/station_name_player"
             app:layout_constraintTop_toBottomOf="@id/station_name_player"
             tools:text="105.2 FM" />
 
         <ImageButton
+            android:id="@+id/button_expand"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/player_expand"
+            android:src="@drawable/ic_expand_less"
+            app:layout_constraintBottom_toBottomOf="@id/station_logo_player"
+            app:layout_constraintEnd_toStartOf="@id/close_button"
+            app:layout_constraintTop_toTopOf="@id/station_logo_player"
+            app:tint="?attr/colorOnSurfaceVariant" />
+
+        <ImageButton
             android:id="@+id/close_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/player_stop"
+            android:src="@drawable/ic_close"
+            app:layout_constraintBottom_toBottomOf="@id/station_logo_player"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/station_logo_player"
+            app:tint="?attr/colorOnSurfaceVariant" />
+
+        <!-- Controls row -->
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_play_pause"
+            style="@style/Widget.Material3.Button.IconButton.Filled"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Stop and close player"
-            android:src="@drawable/ic_close"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginTop="8dp"
+            android:contentDescription="@string/player_play"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            app:icon="@drawable/ic_play"
+            app:iconPadding="0dp"
+            app:iconSize="24dp"
+            app:layout_constraintEnd_toStartOf="@id/record_button"
+            app:layout_constraintTop_toBottomOf="@id/station_logo_player" />
 
-        <androidx.media3.ui.PlayerControlView
-            android:id="@+id/player_view"
-            android:layout_width="0dp"
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/buffering"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/station_logo_player"
-            app:show_fastforward_button="false"
-            app:show_rewind_button="false"
-            app:show_shuffle_button="false"
-            app:show_subtitle_button="false"
-            app:show_timeout="0"
-            app:show_vr_button="false" />
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:indicatorInset="0dp"
+            app:indicatorSize="48dp"
+            app:layout_constraintBottom_toBottomOf="@id/button_play_pause"
+            app:layout_constraintEnd_toEndOf="@id/button_play_pause"
+            app:layout_constraintStart_toStartOf="@id/button_play_pause"
+            app:layout_constraintTop_toTopOf="@id/button_play_pause"
+            app:trackThickness="2dp"
+            tools:visibility="visible" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/record_button"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:contentDescription="@string/recording_start"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            app:icon="@drawable/ic_record"
+            app:iconPadding="0dp"
+            app:iconSize="20dp"
+            app:layout_constraintBottom_toBottomOf="@id/button_play_pause"
+            app:layout_constraintEnd_toStartOf="@id/cast_button"
+            app:layout_constraintTop_toTopOf="@id/button_play_pause" />
 
         <androidx.mediarouter.app.MediaRouteButton
             android:id="@+id/cast_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="@id/button_play_pause"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/button_play_pause" />
+
+        <!--
+            Status line: a packed vertical chain in the space to the start of the
+            controls. Either label can be gone without leaving a hole, and the
+            card never grows a fourth row.
+        -->
+        <TextView
+            android:id="@+id/recording_status"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:drawablePadding="6dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="?attr/textAppearanceLabelSmall"
+            android:textColor="?attr/colorError"
+            android:visibility="gone"
+            app:drawableStartCompat="@drawable/ic_record"
+            app:layout_constraintBottom_toTopOf="@id/cast_device_name"
+            app:layout_constraintEnd_toStartOf="@id/button_play_pause"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/player_view" />
+            app:layout_constraintTop_toTopOf="@id/button_play_pause"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="Recording &#183; 4:12"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/cast_device_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
-            android:gravity="center"
-            android:maxLines="2"
-            android:textAppearance="?attr/textAppearanceCaption"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="?attr/textAppearanceLabelSmall"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@id/cast_button"
-            app:layout_constraintStart_toEndOf="@id/cast_button"
-            app:layout_constraintTop_toTopOf="@id/cast_button"
-            tools:text="Living Room TV"
+            app:layout_constraintBottom_toBottomOf="@id/button_play_pause"
+            app:layout_constraintEnd_toStartOf="@id/button_play_pause"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recording_status"
+            tools:text="Playing on Living Room TV"
             tools:visibility="visible" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>
