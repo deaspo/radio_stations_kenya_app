@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Cleartext stays off, matching the platform default for targetSdk 28+.
+
+    Some station stream URLs are served over plain http. Those will fail to play
+    until their host is added below - deliberately, because a blanket
+    usesCleartextTraffic="true" would expose every request the app makes,
+    including the station API.
+
+    To allow one station: add its stream host to the domain-config block. Find
+    the host in logcat; a blocked request logs
+    "Cleartext HTTP traffic to <host> not permitted".
+-->
+<network-security-config>
+
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+
+    <!--
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">stream.example.co.ke</domain>
+    </domain-config>
+    -->
+
+</network-security-config>

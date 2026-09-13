@@ -1,5 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Material 3 dark colour roles. Previously the night theme reused the light
+     lavender primary, so dark mode was never actually dark-toned. -->
 <resources>
-    <!-- Add this color for the dark theme splash screen -->
-    <color name="splash_background">#555555</color> <!-- A standard dark theme background -->
+
+    <color name="md_primary">#FFB0CF</color>
+    <color name="md_on_primary">#4E1F38</color>
+    <color name="md_primary_container">#68364F</color>
+    <color name="md_on_primary_container">#FFD8E8</color>
+
+    <color name="md_secondary">#DBC0CA</color>
+    <color name="md_on_secondary">#3E2B34</color>
+    <color name="md_secondary_container">#56414A</color>
+    <color name="md_on_secondary_container">#F8DEE8</color>
+
+    <color name="md_tertiary">#F0BC94</color>
+    <color name="md_on_tertiary">#48290D</color>
+    <color name="md_tertiary_container">#623F21</color>
+    <color name="md_on_tertiary_container">#FFDCC2</color>
+
+    <color name="md_error">#F2B8B5</color>
+    <color name="md_on_error">#601410</color>
+    <color name="md_error_container">#8C1D18</color>
+    <color name="md_on_error_container">#F9DEDC</color>
+
+    <color name="md_background">#171215</color>
+    <color name="md_on_background">#ECDFE3</color>
+    <color name="md_surface">#171215</color>
+    <color name="md_on_surface">#ECDFE3</color>
+    <color name="md_surface_variant">#4F444A</color>
+    <color name="md_on_surface_variant">#D3C2C9</color>
+    <color name="md_surface_inverse">#ECDFE3</color>
+    <color name="md_on_surface_inverse">#352F31</color>
+
+    <color name="md_outline">#9C8D95</color>
+    <color name="md_outline_variant">#4F444A</color>
+
+    <color name="splash_background">#FFFFFF</color>
 </resources>

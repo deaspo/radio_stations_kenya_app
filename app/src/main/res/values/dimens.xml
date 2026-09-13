@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Smallest acceptable width for one station tile; the grid span count is
+         derived from this so phones get 2-3 columns and tablets more. -->
+    <dimen name="station_tile_min_width">156dp</dimen>
+    <!-- Space kept clear at the bottom of the list for the mini player. -->
+    <dimen name="player_overlay_reserved">132dp</dimen>
+    <dimen name="grid_gutter">8dp</dimen>
+    <!-- Mini player inner bottom padding, before nav-bar insets are added. -->
+    <dimen name="player_sheet_padding_bottom">8dp</dimen>
+    <dimen name="onboarding_dot_size">9dp</dimen>
+    <dimen name="onboarding_dot_gap">5dp</dimen>
+    <dimen name="list_bottom_padding">24dp</dimen>
+    <dimen name="onboarding_icon_size">132dp</dimen>
+    <!-- Inset for the framed feature icons; the first page's logo uses none. -->
+    <dimen name="onboarding_icon_padding">34dp</dimen>
+</resources>

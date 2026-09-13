@@ -1,11 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- ... permissions ... -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <!-- Writing a stream to a file is a data-sync foreground service. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+
+    <!--
+        Only needed below API 29; from Android 10 recordings are written through
+        MediaStore, which needs no storage permission at all.
+    -->
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+
+    <!--
+        Android 13+ requires this for the local-network (mDNS) discovery the Cast
+        SDK uses. Without it no Cast targets are found on modern devices.
+        neverForLocation keeps it out of the location permission group.
+    -->
+    <uses-permission
+        android:name="android.permission.NEARBY_WIFI_DEVICES"
+        android:usesPermissionFlags="neverForLocation"
+        tools:targetApi="s" />
 
     <application
         android:name=".App"
@@ -14,10 +35,13 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:localeConfig="@xml/locales_config"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.KenyanRadioStations">
-        <!-- Main Activity with Splash Screen Theme -->
+        android:theme="@style/Theme.KenyanRadioStations"
+        tools:targetApi="tiramisu">
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -27,29 +51,71 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- The new OnboardingActivity -->
+
+        <!--
+            The full-screen player. It keeps the task's theme rather than a
+            dialog theme: it is a real screen, reachable by back and by the
+            recents list, and it animates in and out by itself.
+        -->
+        <activity
+            android:name=".PlayerActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+
         <activity
             android:name=".OnboardingActivity"
             android:exported="false" />
-        <!-- About Activity -->
+
         <activity
             android:name=".AboutActivity"
-            android:exported="false" />
-        <!-- Settings Activity -->
+            android:exported="false"
+            android:label="@string/about_title" />
+
         <activity
             android:name=".SettingsActivity"
-            android:exported="false" />
-        <!-- Background Playback Service -->
+            android:exported="false"
+            android:label="@string/settings_title" />
+
+        <activity
+            android:name=".RecordingsActivity"
+            android:exported="false"
+            android:label="@string/recordings_title" />
+
+        <!--
+            Exported so the platform media controls and Bluetooth can bind to the
+            session. The MediaBrowserService action was removed: the service
+            exposes no browsable tree, so advertising one made Android Auto and
+            Assistant list the app and then fail to open it.
+        -->
         <service
             android:name=".RadioService"
             android:exported="true"
             android:foregroundServiceType="mediaPlayback">
             <intent-filter>
-                <action android:name="androidx.media3.session.MediaSessionService"/>
-                <action android:name="android.media.browse.MediaBrowserService" />
+                <action android:name="androidx.media3.session.MediaSessionService" />
             </intent-filter>
         </service>
-        <!-- Google Cast Metadata -->
+
+        <service
+            android:name=".RecordingService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
+        <!--
+            Required by AppCompat to persist a per-app language chosen in the
+            app's own settings on Android 12 and below. On Android 13+ the
+            framework stores it and this is ignored. The service is never
+            started; it exists only to carry the meta-data.
+        -->
+        <service
+            android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
+            android:enabled="false"
+            android:exported="false">
+            <meta-data
+                android:name="autoStoreLocales"
+                android:value="true" />
+        </service>
+
         <meta-data
             android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
             android:value="com.example.kenyanradiostations.CastOptionsProvider" />

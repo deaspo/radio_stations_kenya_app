@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The grab handle at the top of the mini player: the standard cue that the
+     sheet opens into something bigger. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="?attr/colorOnSurfaceVariant" />
+    <corners android:radius="2dp" />
+    <size
+        android:width="32dp"
+        android:height="4dp" />
+</shape>

@@ -1,15 +1,45 @@
-*.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
+# --- Build output -------------------------------------------------------------
 /build
 /captures
 .externalNativeBuild
 .cxx
+*.apk
+*.aab
+
+# --- Gradle and Kotlin caches -------------------------------------------------
+.gradle
+.kotlin
+
+# --- Local machine ------------------------------------------------------------
+# Points at this machine's SDK; every checkout regenerates it.
 local.properties
+.DS_Store
+*.iml
+
+# --- IDE ----------------------------------------------------------------------
+# Whole directory rather than a list of files: nothing in it is worth sharing on
+# a project this size, and the list always goes stale.
+/.idea/
+
+# --- Secrets and signing ------------------------------------------------------
+# Nothing here is committed, ever. Added before a signing config exists, because
+# the moment to think about it is not the moment a keystore appears.
+*.jks
+*.keystore
+keystore.properties
+signing.properties
+
+# Firebase client config. Not a secret by design, but it pins the project and its
+# API key into a public, CC-licensed repository. CI writes a placeholder; to build
+# locally, download it from the Firebase console for the radio-diaspora project
+# and drop it in app/.
+/app/google-services.json
+
+# --- Working files ------------------------------------------------------------
+# One-off helpers used to land this branch; not part of the project.
+/commit-changes.ps1
+/push-and-pr.ps1
+/docs/pull-request.md
+
+# Scratch directory created by tooling, not by the build.
+/Claude outputs/
