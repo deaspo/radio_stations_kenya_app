@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Kiswahili. Machine-assisted and NOT yet reviewed by a first-language
+    speaker - have someone check the tone before release. The technical terms
+    (Wi-Fi, Cast, MP3, AAC, HLS) are deliberately left in English, which is how
+    they are used in Kenya.
+-->
+<resources>
+    <string name="app_name">Radio Diaspora</string>
+    <string name="app_author">@deaspo</string>
+    <string name="app_url">https://github.com/deaspo/radio_stations_kenya_app</string>
+
+    <string name="action_settings">Mipangilio</string>
+    <string name="action_about">Kuhusu</string>
+    <string name="action_refresh">Onyesha vituo upya</string>
+    <string name="action_recordings">Rekodi</string>
+
+    <string name="search_hint">Tafuta vituo</string>
+    <string name="search_clear">Futa utafutaji</string>
+    <string name="filter_all">Zote</string>
+    <string name="filter_favourites">Vipendwa</string>
+    <string name="station_logo_of">Nembo ya %1$s</string>
+    <string name="play_station">Sikiliza %1$s</string>
+    <string name="now_playing_badge">Hewani</string>
+    <string name="add_to_favourites">Ongeza %1$s kwenye vipendwa</string>
+    <string name="remove_from_favourites">Ondoa %1$s kwenye vipendwa</string>
+
+    <string name="empty_title">Hakuna kituo kilichopatikana</string>
+    <string name="empty_message">Jaribu neno lingine la utafutaji.</string>
+    <string name="empty_favourites_title">Bado huna vipendwa</string>
+    <string name="empty_favourites_message">Gusa moyo kwenye kituo chochote ili kikae hapa.</string>
+    <string name="error_title">Imeshindwa kupakia vituo</string>
+    <string name="error_message">Angalia muunganisho wako kisha ujaribu tena.</string>
+    <string name="error_retry">Jaribu tena</string>
+    <string name="offline_title">Huna muunganisho</string>
+    <string name="offline_message">Hakuna intaneti. Unganisha tena na orodha itapakia yenyewe.</string>
+    <string name="error_stream_unavailable">Kituo hicho hakirushi matangazo kwa sasa.</string>
+    <string name="error_notification_permission">Arifa zinahitajika ili usikilizaji uendelee chinichini.</string>
+    <string name="error_wifi_only">Umewasha Wi-Fi pekee, na huko kwenye Wi-Fi. Badilisha katika Mipangilio.</string>
+
+    <string name="player_connecting">Inaunganisha…</string>
+    <string name="player_stop">Simamisha usikilizaji</string>
+    <string name="player_artwork">Picha ya kituo kinachosikika sasa</string>
+    <string name="player_play">Cheza</string>
+    <string name="player_pause">Sitisha</string>
+    <string name="player_live">MOJA KWA MOJA</string>
+    <string name="player_expand">Fungua kichezaji cha skrini nzima</string>
+    <string name="player_collapse">Funga kichezaji cha skrini nzima</string>
+    <string name="player_casting_to">Inasikika kwenye %1$s</string>
+
+    <string name="recording_start">Rekodi kituo hiki</string>
+    <string name="recording_stop">Simamisha kurekodi</string>
+    <string name="recording_unavailable">Kituo hiki kina mkondo wa HLS pekee, ambao hauwezi kurekodiwa moja kwa moja.</string>
+    <string name="recording_started">Inarekodi %1$s</string>
+    <string name="recording_saved">Imehifadhiwa kama %1$s</string>
+    <string name="recording_failed_storage">Imeshindwa kutengeneza faili. Angalia nafasi ya hifadhi.</string>
+    <string name="recording_failed_empty">Hakuna kilichorekodiwa — kituo hakikutuma sauti yoyote.</string>
+    <string name="recording_needs_storage_permission">Ruhusa ya hifadhi inahitajika ili kuhifadhi rekodi kwenye toleo hili la Android.</string>
+    <string name="recording_notification_title">Inarekodi %1$s</string>
+    <string name="recording_notification_done_title">Kurekodi kumekamilika</string>
+    <string name="recording_channel_name">Kurekodi</string>
+    <string name="recording_channel_description">Huonyesha maendeleo wakati kituo kinarekodiwa</string>
+    <string name="recording_in_progress">Inarekodi · %1$s</string>
+    <string name="recording_timed_out">%1$s\n\nAndroid huruhusu kurekodi chinichini kwa saa sita kwa siku, kwa hivyo kumesimama hapo.</string>
+
+    <string name="recordings_title">Rekodi</string>
+    <string name="recordings_empty_title">Bado hakuna rekodi</string>
+    <string name="recordings_empty_message">Gusa kitufe cha kurekodi wakati kituo kinasikika.</string>
+    <string name="recordings_location">Zimehifadhiwa katika Music/Radio Diaspora</string>
+    <string name="recordings_play">Sikiliza</string>
+    <string name="recordings_share">Shiriki</string>
+    <string name="recordings_delete">Futa</string>
+    <string name="recordings_delete_confirm_title">Ufute rekodi hii?</string>
+    <string name="recordings_delete_confirm_message">%1$s itaondolewa kwenye kifaa hiki.</string>
+    <string name="recordings_deleted">Rekodi imefutwa</string>
+    <string name="recordings_delete_failed">Imeshindwa kufuta rekodi hiyo</string>
+    <string name="recordings_no_player">Hakuna programu kwenye kifaa hiki inayoweza kusikiliza faili hiyo</string>
+    <string name="recordings_share_via">Shiriki rekodi</string>
+    <string name="recordings_share_confirm_title">Ushiriki rekodi hii?</string>
+    <string name="recordings_share_confirm_message">Hii ni rekodi ya matangazo ya moja kwa moja usiyoyamiliki. Kuishiriki kunaweza kukiuka hakimiliki ya mtangazaji — rekodi zimekusudiwa usikilizaji wako binafsi.</string>
+    <string name="recordings_share_confirm_action">Shiriki hata hivyo</string>
+    <string name="recordings_meta">%1$s · %2$s</string>
+
+    <string name="onboarding_previous">Rudi</string>
+    <string name="onboarding_next">Endelea</string>
+    <string name="onboarding_skip">Ruka</string>
+    <string name="onboarding_finish">Kubali na uendelee</string>
+
+    <string name="onboarding_title_welcome">Karibu Radio Diaspora</string>
+    <string name="onboarding_message_welcome">Redio za Kenya moja kwa moja, popote ulipo. Vituo vingi, bila malipo, na huhitaji akaunti. Inapatikana kwa Kiingereza na Kiswahili.</string>
+
+    <string name="onboarding_title_find">Tafuta vituo vyako</string>
+    <string name="onboarding_message_find">Tafuta kwa jina, kisha gusa moyo kwenye kituo chochote ili kikae chini ya Vipendwa na ukifikie kwa mguso mmoja.</string>
+
+    <string name="onboarding_title_listen">Sikiliza popote</string>
+    <string name="onboarding_message_listen">Usikilizaji unaendelea chinichini na kwenye skrini iliyofungwa, na unaweza kutuma kituo chochote kwenye spika au TV yenye Google Cast kwenye mtandao wako. Gusa kichezaji kidogo chini ili kukifungua kwa skrini nzima.</string>
+
+    <string name="onboarding_title_record">Rekodi unachosikia</string>
+    <string name="onboarding_message_record">Gusa kitufe cha kurekodi wakati kituo kinasikika. Rekodi huhifadhiwa katika Music/Radio Diaspora na hufunguka katika programu yoyote ya muziki — kama MP3 pale kituo kinaporusha kwa MP3, bila kubadilisha muundo.</string>
+
+    <string name="onboarding_title_agreement">Makubaliano ya mtumiaji</string>
+    <string name="onboarding_message_agreement">Programu hii hurusha maudhui yanayopatikana hadharani kutoka kwa watangazaji wa redio wa Kenya. Hatuhifadhi wala kumiliki maudhui hayo; haki zote ni za wamiliki husika. Chochote unachorekodi ni kwa matumizi yako binafsi pekee. Programu hii ni kwa matumizi binafsi, si ya kibiashara.</string>
+
+    <string name="settings_title">Mipangilio</string>
+    <string name="settings_section_appearance">Muonekano</string>
+    <string name="settings_theme">Mandhari</string>
+    <string name="settings_theme_system">Fuata mfumo</string>
+    <string name="settings_theme_light">Nuru</string>
+    <string name="settings_theme_dark">Giza</string>
+    <string name="settings_language">Lugha</string>
+    <string name="settings_language_system">Fuata mfumo</string>
+    <string name="settings_language_en">Kiingereza</string>
+    <string name="settings_language_sw">Kiswahili</string>
+
+    <string name="settings_section_playback">Usikilizaji</string>
+    <string name="settings_resume_title">Endeleza kituo cha mwisho</string>
+    <string name="settings_resume_summary">Anza kusikiliza kituo ulichosikiliza mwisho programu inapofunguliwa</string>
+    <string name="settings_keep_screen_on_title">Weka skrini iwe wazi</string>
+    <string name="settings_keep_screen_on_summary">Zuia skrini kuzima wakati kituo kinasikika</string>
+
+    <string name="settings_section_data">Data</string>
+    <string name="settings_wifi_only_title">Wi-Fi pekee</string>
+    <string name="settings_wifi_only_summary">Usisikilize wala kurekodi kwa data ya simu</string>
+
+    <string name="settings_section_recording">Kurekodi</string>
+    <string name="settings_recording_limit">Urefu wa juu</string>
+    <string name="settings_recording_limit_none">Bila kikomo (Android husimamisha baada ya saa 6)</string>
+    <string name="settings_recording_limit_minutes">Dakika %1$d</string>
+    <string name="settings_recording_format_title">Muundo</string>
+    <string name="settings_recording_format_summary">Hurekodiwa kama kituo kinavyorusha — MP3 pale inapopatikana, vinginevyo AAC. Hakuna kubadilisha muundo, hivyo hakuna ubora unaopotea.</string>
+
+    <string name="settings_section_storage">Hifadhi</string>
+    <string name="settings_clear_cache_title">Futa akiba ya picha</string>
+    <string name="settings_clear_cache_summary">Ondoa nembo za vituo zilizopakuliwa</string>
+    <string name="settings_cache_cleared">Akiba ya picha imefutwa</string>
+
+    <string name="settings_section_about">Kuhusu</string>
+    <string name="settings_replay_onboarding_title">Onyesha skrini za karibu tena</string>
+    <string name="settings_replay_onboarding_summary">Utangulizi utaonekana wakati ujao programu itakapoanza</string>
+    <string name="settings_onboarding_reset">Skrini za karibu zitaonekana wakati ujao</string>
+
+    <string name="settings_privacy_heading">Faragha</string>
+    <string name="settings_privacy_body">Programu hii haikusanyi, haihifadhi wala haishiriki data yoyote binafsi. Ruhusa inazoomba hutumika kwa usikilizaji na kurekodi pekee: intaneti kwa ajili ya sauti, huduma ya mbele ili usikilizaji na kurekodi viendelee chinichini, na ruhusa ya vifaa vilivyo karibu ili vifaa vya Cast vipatikane.</string>
+    <string name="settings_licence_heading">Leseni</string>
+    <string name="settings_licence_body">Imetolewa chini ya leseni ya Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International. Unaweza kushiriki na kubadilisha maudhui ukitoa sifa, kwa matumizi yasiyo ya kibiashara, chini ya leseni hiyo hiyo.</string>
+
+    <string name="about_title">Kuhusu</string>
+    <string name="about_version">Toleo %1$s</string>
+    <string name="about_created_by">Imetengenezwa na</string>
+</resources>
