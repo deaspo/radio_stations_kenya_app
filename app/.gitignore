@@ -1,2 +1,5 @@
 /build
+
+# Release artifacts: APK, output-metadata.json and the generated baseline
+# profiles. All reproducible from a build, none belong in history.
 /release
