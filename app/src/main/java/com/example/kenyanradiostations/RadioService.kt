@@ -1,37 +1,37 @@
 package com.example.kenyanradiostations
 
+import android.content.Intent
 import androidx.annotation.OptIn
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.session.MediaLibraryService
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSession.ConnectionResult
+import androidx.media3.session.MediaSessionService
 
-class RadioService : MediaLibraryService() {
+/**
+ * Holds the ExoPlayer instance and the media session that survives the activity.
+ *
+ * This is a [MediaSessionService] rather than a MediaLibraryService: the app has
+ * no browsable content tree, and advertising one it cannot serve makes Android
+ * Auto and Assistant list the app and then fail to open it.
+ */
+class RadioService : MediaSessionService() {
 
-    //private var mediaSession: MediaSessionCompat? = null
-    //private var player: ExoPlayer? = null
-    //private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
-    private var mediaLibrarySession: MediaLibrarySession? = null
+    private var mediaSession: MediaSession? = null
     private lateinit var player: ExoPlayer
 
-    private val mediaLibrarySessionCallback = object : MediaLibrarySession.Callback {
+    private val sessionCallback = object : MediaSession.Callback {
         @OptIn(UnstableApi::class)
         override fun onConnect(
             session: MediaSession,
             controller: MediaSession.ControllerInfo
         ): ConnectionResult {
-            // Get the default session commands from the super class
-            val sessionCommands =
-                ConnectionResult.DEFAULT_SESSION_COMMANDS.buildUpon()
-                    // Add any custom commands here if needed
-                    .build()
-
-            val playerCommands = MediaSession.ConnectionResult.DEFAULT_PLAYER_COMMANDS.buildUpon()
-                // Remove all commands related to seeking and navigation
+            // Live radio cannot seek, so hide every seek and skip command from
+            // controllers - including the system notification and Bluetooth.
+            val playerCommands = ConnectionResult.DEFAULT_PLAYER_COMMANDS.buildUpon()
                 .remove(Player.COMMAND_SEEK_TO_NEXT)
                 .remove(Player.COMMAND_SEEK_TO_NEXT_MEDIA_ITEM)
                 .remove(Player.COMMAND_SEEK_TO_PREVIOUS)
@@ -41,9 +41,8 @@ class RadioService : MediaLibraryService() {
                 .remove(Player.COMMAND_SEEK_IN_CURRENT_MEDIA_ITEM)
                 .build()
 
-            // Return a ConnectionResult that accepts the connection and specifies the commands
             return ConnectionResult.accept(
-                sessionCommands,
+                ConnectionResult.DEFAULT_SESSION_COMMANDS,
                 playerCommands
             )
         }
@@ -57,33 +56,35 @@ class RadioService : MediaLibraryService() {
             .setUsage(C.USAGE_MEDIA)
             .build()
 
-        //player = ExoPlayer.Builder(this).build().also { it.addListener(this) }
         player = ExoPlayer.Builder(this)
-            .setAudioAttributes(audioAttributes, true)
+            .setAudioAttributes(audioAttributes, /* handleAudioFocus = */ true)
             .setHandleAudioBecomingNoisy(true)
             .build()
 
-        mediaLibrarySession =
-            MediaLibrarySession.Builder(this, player, mediaLibrarySessionCallback)
-                .build()
+        mediaSession = MediaSession.Builder(this, player)
+            .setCallback(sessionCallback)
+            .build()
     }
 
-    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaLibrarySession? {
-        return mediaLibrarySession
-    }
+    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? =
+        mediaSession
 
-    override fun onTaskRemoved(rootIntent: android.content.Intent?) {
-        if (mediaLibrarySession?.player?.playWhenReady == false) {
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        // Stop only when nothing is actually playing; otherwise playback should
+        // survive the task being swiped away, which is the point of the service.
+        val session = mediaSession
+        if (session == null || !session.player.isPlaying) {
             stopSelf()
         }
+        super.onTaskRemoved(rootIntent)
     }
 
     override fun onDestroy() {
-        mediaLibrarySession?.run {
+        mediaSession?.run {
             player.release()
             release()
-            mediaLibrarySession = null
         }
+        mediaSession = null
         super.onDestroy()
     }
 }
