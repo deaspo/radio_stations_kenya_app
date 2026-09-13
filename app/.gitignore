@@ -3,3 +3,7 @@
 # Release artifacts: APK, output-metadata.json and the generated baseline
 # profiles. All reproducible from a build, none belong in history.
 /release
+
+# Same, for the staging build type - the release R8 pipeline signed with the
+# debug key. `./gradlew installStaging` writes here.
+/staging

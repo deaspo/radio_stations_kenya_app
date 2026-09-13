@@ -1,6 +1,7 @@
 # Radio Diaspora — state, changes applied, and what is still open
 
-Last updated 2026-09-13, against commit `88dc59f` plus the two rounds of work below.
+Last updated 2026-09-13, against commit `88dc59f` plus the three rounds of work
+below. The branch builds: `assembleStaging` is green.
 
 ---
 
@@ -197,27 +198,38 @@ the build.
 
 ---
 
-## 5. Before this builds
+## 5. It builds — 13 September 2026
 
-1. **Firebase must know the new package.** The Google Services plugin matches on
-   `applicationId`, and `app/google-services.json` still lists
-   `com.example.kenyanradiostations`. Add `io.github.deaspo.radiodiaspora` to the
-   `radio-diaspora` Firebase project and replace the file, or
-   `:app:processDebugGoogleServices` fails with *"No matching client found for package
-   name"*. Reverting the `applicationId` line is the other option.
-2. **`app/src/main/java/com/kenyanradio/` should be deleted**, along with
-   `PlayerViewModel.kt`. Both are emptied to comments — the tooling used here cannot
-   remove files.
-3. `./gradlew testDebugUnitTest :app:assembleDebug`.
+`assembleStaging` succeeds: the release R8 pipeline, signed with the debug key.
+That closes the three things this section used to list.
+
+- **Firebase knows the new package.** `processStagingGoogleServices` runs, so
+  `app/google-services.json` and `io.github.deaspo.radiodiaspora` agree.
+- **`com/kenyanradio/` is gone.** `PlayerViewModel.kt` is still on disk, emptied
+  to comments; `commit-changes.ps1` deletes it and stages the deletion.
+- **`gradlew` is back.** Both wrapper scripts were regenerated, so CI and
+  non-Windows checkouts can build.
+
+One thing to be clear about: a green `assembleStaging` proves the **keep rules
+survive R8**. It does not prove Cast works. `CastOptionsProvider` is resolved
+from a manifest string at runtime, so a stripped class throws on first launch,
+not at build time. `installStaging`, then play, record and cast, is still the
+check.
+
+The JDK is worth recording: Gradle 8.13 supports up to Java 24, and current
+Android Studio bundles JBR 25. The Gradle JDK has to be set to 17 or 21 until
+the AGP 9 / Gradle 9.6 migration below.
 
 ---
 
 ## 6. Open items — how each is being closed
 
-**Nothing in any round has been compiled here.** The Windows update of
-8 September blocks the workspace from mounting the project folder. Resource
-references, XML well-formedness and ViewBinding field names are verified
-mechanically; the build is the real gate.
+**What has been verified by machine, and what has not.** The workspace this was
+written in still cannot mount the project folder — a Windows update of
+8 September — so resource references, XML well-formedness, ViewBinding field
+names, string parity and placeholder arity were all checked mechanically there.
+The compile and the R8 run happened on the development machine and passed. No
+part of the app has been exercised on a device.
 
 ### R8 — resolved in code, needs one verification run
 
@@ -246,9 +258,10 @@ debug key, so it installs without a release keystore.
 ./gradlew installStaging
 ```
 
-Then exercise playback, recording, Cast and the station list on a minified build.
-That is the verification the old note asked for, now one command instead of a
-keystore setup.
+`assembleStaging` now passes, which means R8 runs clean and the keep rules parse.
+The remaining half is runtime: install it and exercise playback, recording, Cast
+and the station list. A stripped `CastOptionsProvider` fails on first launch, not
+during the build, so only that pass can close this item.
 
 ### Swahili — reviewed and cleared
 
@@ -330,14 +343,19 @@ does that.
 
 ## 7. Still open
 
-- **Toolchain and dependency bumps.** AGP 8.11.1 → 9.x, Media3 1.3.1 → 1.11.x,
-  Cast 21.5.0 → 22.x. One commit each, in that order, AGP last.
-- **`gradlew` is missing from the repository root.** Only `gradlew.bat` is
-  present, so CI and every macOS or Linux checkout fail before Gradle starts.
-  `git checkout -- gradlew` if git still tracks it, otherwise regenerate both
-  scripts with `.\gradlew.bat wrapper --gradle-version 8.13`.
+- **Toolchain and dependency bumps.** Media3 1.3.1 → 1.11.x, Cast 21.5.0 → 22.x,
+  then AGP 8.11.1 → 9.4.0 with Gradle 8.13 → 9.6.0. One commit each, in that
+  order, AGP last — it is a migration with breaking changes, not a version bump,
+  and it is what lets the bundled JBR 25 be used directly.
 - **No release keystore or signing config.** `staging` covers testing; a real
   release still needs one.
+- **The JDK is pinned by the toolchain, not by choice.** Gradle 8.13 tops out at
+  Java 24; Android Studio now bundles JBR 25, so the Gradle JDK must be set to 17
+  or 21 by hand on every machine. The AGP 9 / Gradle 9.6 upgrade above is what
+  removes that.
+- **Nothing has been run on a device.** The build is green; the app has not been
+  opened. Playback, recording, Cast, rotation and the full-screen player are all
+  unexercised.
 - **No instrumentation tests.** The unit tests cover parsing, stream selection
   and file naming. The service, MediaStore writes and the Cast hand-off are
   untested.
