@@ -21,7 +21,7 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
-    app:cardBackgroundColor="?attr/colorSurfaceVariant"
+    app:cardBackgroundColor="?attr/colorSurfaceRaised"
     app:strokeColor="?attr/colorOutline"
     app:strokeWidth="@dimen/stroke_hairline"
     app:cardElevation="@dimen/elev_2"
