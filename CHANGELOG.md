@@ -28,10 +28,15 @@ behaviour changed.
   a square crop cut in half — and the playing tile gains an inset ring.
 - The language row is the first row in Settings, and the Settings cards use the
   same 14dp outlined card as every other screen.
-- Dark mode lifts six surfaces above the spec's values: at the spec's `#251B23`
-  a card sat at 1.09:1 against the background and stopped reading as a card.
-  Cards, selected chips and the snackbar now each read as their own layer;
-  every text pair stays above 4.5:1.
+- **Dark mode is designed, not derived.** Light separates layers by a luminance
+  jump — white cards on paper — that dark cannot copy. Dark uses a stepped tonal
+  ladder on the brand hue instead: page, card (1.21:1), raised mini player and
+  dialogs (1.50:1), snackbar (2.03:1), hairline (2.41:1), with Material's
+  elevation overlay off so those are the colours that render. Primary becomes a
+  pale saturated mauve with plum text rather than a greyed-out ink. Worst text
+  pair 5.40:1; nothing pure black or white.
+- The live dot inside a "Live" pill was the same hue as the pill and invisible in
+  both themes; it now takes the pill's text colour.
 
 ### Added
 
