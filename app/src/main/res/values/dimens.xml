@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- ===== Layout, unchanged from the current build ===== -->
+
     <!-- Smallest acceptable width for one station tile; the grid span count is
          derived from this so phones get 2-3 columns and tablets more. -->
     <dimen name="station_tile_min_width">156dp</dimen>
@@ -14,4 +17,32 @@
     <dimen name="onboarding_icon_size">132dp</dimen>
     <!-- Inset for the framed feature icons; the first page's logo uses none. -->
     <dimen name="onboarding_icon_padding">34dp</dimen>
+
+    <!-- ===== Mauve Editorial shape scale ===== -->
+
+    <dimen name="shape_xs">8dp</dimen>    <!-- snackbar, chips -->
+    <dimen name="shape_sm">10dp</dimen>   <!-- text buttons, search field -->
+    <dimen name="shape_md">14dp</dimen>   <!-- station tiles, list rows -->
+    <dimen name="shape_lg">16dp</dimen>   <!-- mini player, cards -->
+    <dimen name="shape_xl">18dp</dimen>   <!-- full-player art, dialogs -->
+
+    <!-- ===== Elevation ===== -->
+
+    <dimen name="elev_1">1dp</dimen>      <!-- resting cards -->
+    <dimen name="elev_2">3dp</dimen>      <!-- mini player -->
+    <dimen name="elev_3">8dp</dimen>      <!-- dialogs -->
+
+    <!-- ===== Space ===== -->
+
+    <!-- Android's own minimum; every button and row is held to it. -->
+    <dimen name="touch_target">48dp</dimen>
+    <dimen name="screen_pad_h">14dp</dimen>
+    <dimen name="screen_pad_v">12dp</dimen>
+
+    <!-- ===== Component sizes ===== -->
+
+    <dimen name="live_dot_size">7dp</dimen>
+    <dimen name="live_dot_size_tile">9dp</dimen>
+    <dimen name="stroke_hairline">1dp</dimen>
+    <dimen name="stroke_ring">2dp</dimen>
 </resources>
