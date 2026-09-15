@@ -71,7 +71,7 @@
                 android:id="@+id/now_playing_dot"
                 android:layout_width="@dimen/live_dot_size_tile"
                 android:layout_height="@dimen/live_dot_size_tile"
-                android:background="@drawable/bg_live_dot" />
+                android:background="@drawable/bg_live_dot_on_primary" />
 
             <TextView
                 android:layout_width="wrap_content"
