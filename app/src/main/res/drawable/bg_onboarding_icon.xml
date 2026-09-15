@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Circular plate behind the small feature icons, so a 24dp vector still
-     reads as deliberate at onboarding size. -->
+<!-- Plate behind the small feature icons, so a 24dp vector still reads as
+     deliberate at onboarding size. -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="oval">
-    <solid android:color="?attr/colorPrimaryContainer" />
+    android:shape="rectangle">
+    <solid android:color="?attr/colorSurfaceVariant" />
+    <corners android:radius="28dp" />
+    <stroke
+        android:width="@dimen/stroke_hairline"
+        android:color="?attr/colorOutline" />
 </shape>
