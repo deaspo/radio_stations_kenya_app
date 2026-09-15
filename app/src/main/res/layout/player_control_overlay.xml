@@ -22,7 +22,9 @@
     android:clickable="true"
     android:focusable="true"
     app:cardBackgroundColor="?attr/colorSurfaceVariant"
-    app:cardElevation="12dp"
+    app:strokeColor="?attr/colorOutline"
+    app:strokeWidth="@dimen/stroke_hairline"
+    app:cardElevation="@dimen/elev_2"
     app:shapeAppearanceOverlay="@style/ShapeAppearance.App.PlayerSheet">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -36,7 +38,7 @@
 
         <View
             android:id="@+id/sheet_handle"
-            android:layout_width="32dp"
+            android:layout_width="36dp"
             android:layout_height="4dp"
             android:alpha="0.4"
             android:background="@drawable/bg_sheet_handle"
@@ -55,7 +57,7 @@
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sheet_handle"
-            app:shapeAppearanceOverlay="@style/ShapeAppearance.App.LogoSmall"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.App.Sm"
             tools:src="@tools:sample/avatars" />
 
         <TextView
@@ -79,7 +81,7 @@
             android:drawablePadding="6dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textAppearance="@style/Text.App.Caption"
             android:textColor="?attr/colorOnSurfaceVariant"
             app:layout_constraintEnd_toEndOf="@id/station_name_player"
             app:layout_constraintStart_toStartOf="@id/station_name_player"
@@ -115,8 +117,8 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_play_pause"
             style="@style/Widget.Material3.Button.IconButton.Filled"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
             android:layout_marginTop="8dp"
             android:contentDescription="@string/player_play"
             android:insetTop="0dp"
@@ -134,7 +136,7 @@
             android:indeterminate="true"
             android:visibility="gone"
             app:indicatorInset="0dp"
-            app:indicatorSize="48dp"
+            app:indicatorSize="44dp"
             app:layout_constraintBottom_toBottomOf="@id/button_play_pause"
             app:layout_constraintEnd_toEndOf="@id/button_play_pause"
             app:layout_constraintStart_toStartOf="@id/button_play_pause"
