@@ -312,29 +312,46 @@ spec. Two findings, both real.
 with no outline. Every other screen had moved to the 14dp outlined card; this
 one was missed. Fixed.
 
-**The spec's dark palette collapsed on a real screen.** The Option A mockup is
-light-only — its dark values were derived on paper and never rendered. Measured
-against the palette they replaced:
+**The spec's dark palette collapsed on a real screen — so dark is now designed
+rather than derived.** The Option A mockup is light-only; its dark values were
+computed on paper and never rendered. On a device the spec's card colour sat at
+**1.09:1** against the background and its snackbar at **1.04:1** against the
+mini player it rests on. A card that is not visibly a card, and a snackbar the
+same colour as the thing under it, is what "the new UI is not much visible"
+looks like.
 
-| Dark mode | before | spec | now |
-|---|---|---|---|
-| card vs background | 1.99:1 | **1.09:1** | 1.22:1 |
-| outline vs background | 5.87:1 | **1.37:1** | 1.82:1 |
-| selected chip vs background | — | 1.37:1 | 1.70:1 |
-| snackbar vs card | — | **1.04:1** | 1.40:1 |
+The light theme separates its layers by a luminance jump — white cards on warm
+paper — that dark cannot copy, because there is no white to jump to. Dark uses
+a **stepped tonal ladder** instead, every step on the brand hue (OKLCH h=340,
+low chroma so it reads as ink rather than purple):
 
-At 1.09:1 a card is not visibly a card; at 1.04:1 the snackbar was the same
-colour as the mini player it sits on. So in dark mode the user went from very
-prominent boxed cards to near-flat surfaces and a muted primary, which reads as
-"nothing changed" or "it got duller" — exactly what was reported. Six dark
-values are lifted just enough for each layer to read as a layer, every text pair
-still above 4.5:1; the reasoning sits in a comment at the top of
-`values-night/colors.xml` so nobody "tidies" them back.
+| layer | colour | vs page |
+|---|---|---|
+| page | `#1F111A` | — |
+| card, row, field | `#33212D` | 1.21:1 |
+| raised: mini player, dialog | `#43303C` | 1.50:1 |
+| snackbar | `#584351` | 2.03:1 |
+| hairline outline | `#614F5B` | 2.41:1 |
 
-Light mode is where the design was actually drawn. The paper surface, the white
-cards on it, the serif titles and the 4:3.1 tiles are all unmistakable there.
-Dark is, by the spec's own framing, the secondary theme — quieter by design,
-now quiet rather than absent.
+Each step reads as its own layer with no outline doing the work; the outline is
+a quiet hairline rather than the thing that makes a card visible. Material's
+elevation overlay is switched off in the theme so these are the colours that
+actually render — otherwise Material tints every elevated surface towards
+primary by its elevation, on top of the ladder, and two systems decide one
+colour.
+
+Primary flips role. In light it is an ink, `#964C74` on paper. In dark it is a
+pale, saturated mauve `#E8A6D1` with deep plum text on it — the brand kept alive
+at night rather than greyed out. The live dot is brighter than in light, because
+on a dark page it has to glow, not sit. Nothing is pure black or pure white.
+Every text pair measures **5.40:1 or better**; the raised layer needed a new
+token, `colorSurfaceRaised`, which in light is simply white (the 3dp shadow does
+the separating there).
+
+One bug this surfaced in both themes: the live dot inside the "Live" pill on a
+tile was `colorLiveDot` on a `colorPrimary` background — same hue, about 1.5:1,
+invisible. Inside a pill the dot now takes the pill's own text colour
+(`bg_live_dot_on_primary`); on a card it keeps the live-dot colour.
 
 **Confirmed implemented, per screen:** catalogue (search field, tiles, playing
 ring, badge, empty/offline states, retry button), mini player, full-screen
