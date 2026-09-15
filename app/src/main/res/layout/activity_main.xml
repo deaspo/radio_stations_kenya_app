@@ -32,9 +32,17 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            app:boxCornerRadiusBottomEnd="@dimen/shape_sm"
+            app:boxCornerRadiusBottomStart="@dimen/shape_sm"
+            app:boxCornerRadiusTopEnd="@dimen/shape_sm"
+            app:boxCornerRadiusTopStart="@dimen/shape_sm"
+            app:boxStrokeColor="?attr/colorOutline"
+            app:boxStrokeWidth="@dimen/stroke_hairline"
+            app:boxStrokeWidthFocused="@dimen/stroke_ring"
             app:endIconMode="clear_text"
             app:hintEnabled="false"
-            app:startIconDrawable="@drawable/ic_search">
+            app:startIconDrawable="@drawable/ic_search"
+            app:startIconTint="?attr/colorOnSurfaceVariant">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/search_input"

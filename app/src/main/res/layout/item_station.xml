@@ -1,44 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Station tile.
+
+    The artwork is 4:3.1 rather than square: station logos are overwhelmingly
+    wordmarks, which a square crop cuts in half.
+-->
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/station_card"
-    style="@style/Widget.Material3.CardView.Filled"
+    style="@style/Widget.App.Card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="6dp"
+    android:layout_margin="@dimen/grid_gutter"
     android:checkable="false"
     android:clickable="true"
-    android:focusable="true"
-    app:cardCornerRadius="20dp"
-    app:strokeWidth="0dp">
+    android:focusable="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="12dp">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/station_logo"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="?attr/colorSurfaceVariant"
-            android:padding="0dp"
             android:scaleType="centerCrop"
-            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintDimensionRatio="H,4:3.1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearanceOverlay="@style/ShapeAppearance.App.Logo"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.App.ArtTop"
             tools:src="@tools:sample/avatars" />
+
+        <!-- Inset ring over the artwork while this station is the one playing -->
+        <View
+            android:id="@+id/playing_ring"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/tile_playing_ring"
+            android:importantForAccessibility="no"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/station_logo"
+            app:layout_constraintEnd_toEndOf="@id/station_logo"
+            app:layout_constraintStart_toStartOf="@id/station_logo"
+            app:layout_constraintTop_toTopOf="@id/station_logo"
+            tools:visibility="visible" />
 
         <!-- Shown only while this station is the one playing -->
         <LinearLayout
             android:id="@+id/now_playing_badge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="6dp"
+            android:layout_margin="8dp"
             android:background="@drawable/bg_now_playing_badge"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -47,15 +62,15 @@
             android:paddingEnd="8dp"
             android:paddingBottom="3dp"
             android:visibility="gone"
-            app:layout_constraintStart_toStartOf="@id/station_logo"
+            app:layout_constraintEnd_toEndOf="@id/station_logo"
             app:layout_constraintTop_toTopOf="@id/station_logo"
             tools:visibility="visible">
 
             <!-- Pulsed by the adapter while this station is the one playing. -->
             <View
                 android:id="@+id/now_playing_dot"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
+                android:layout_width="@dimen/live_dot_size_tile"
+                android:layout_height="@dimen/live_dot_size_tile"
                 android:background="@drawable/bg_live_dot" />
 
             <TextView
@@ -71,12 +86,15 @@
             android:id="@+id/station_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
             android:ellipsize="end"
             android:maxLines="2"
             android:minLines="2"
-            android:textAppearance="?attr/textAppearanceTitleSmall"
+            android:textAppearance="@style/Text.App.BodySm"
             android:textColor="?attr/colorOnSurface"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/station_favourite"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/station_logo"
@@ -87,6 +105,7 @@
             style="@style/Widget.Material3.Button.IconButton"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_marginEnd="2dp"
             android:insetTop="0dp"
             android:insetBottom="0dp"
             app:icon="@drawable/ic_favorite_border"
