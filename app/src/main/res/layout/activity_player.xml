@@ -73,7 +73,7 @@
         android:textAppearance="?attr/textAppearanceLabelSmall"
         android:textColor="?attr/colorOnPrimary"
         android:visibility="gone"
-        app:drawableStartCompat="@drawable/bg_live_dot"
+        app:drawableStartCompat="@drawable/bg_live_dot_on_primary"
         app:layout_constraintBottom_toTopOf="@id/station_name"
         app:layout_constraintStart_toStartOf="parent"
         tools:visibility="visible" />
