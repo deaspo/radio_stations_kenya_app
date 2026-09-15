@@ -1,6 +1,6 @@
 # Radio Diaspora — state, changes applied, and what is still open
 
-Last updated 2026-09-13, against commit `88dc59f` plus the three rounds of work
+Last updated 2026-09-13, against commit `88dc59f` plus the four rounds of work
 below. The branch builds: `assembleStaging` is green.
 
 ---
@@ -127,6 +127,7 @@ vector I cannot preview would have been guesswork.
 `appdistribution` plugin removed; `StationParser` extracted and covered by unit tests;
 a GitHub Actions workflow; a `network_security_config.xml`; a Swahili locale wired to
 `android:localeConfig`; version **2.0.0** (`versionCode` 2) with a `CHANGELOG.md`.
+(Round four raises this to **2.1.0** / `versionCode` 3 - see section 5.)
 
 Major rather than minor: semver's MAJOR is for breaking changes, and for an app the
 equivalent is a rebuilt interface plus a changed identity. Every screen was
@@ -198,7 +199,171 @@ the build.
 
 ---
 
-## 5. It builds — 13 September 2026
+## 5. Round four — Mauve Editorial
+
+Implementation of `plan.md` / `RadioDiaspora_design_spec_A.md`, Option A. Visual
+language only: no screen, component, data flow or behaviour changed.
+
+### What actually did the work
+
+Nothing in the layouts referenced a colour directly — every one went through a
+theme attribute already — so replacing the values in `colors.xml` and
+`values-night/colors.xml` re-skinned all nine screens at once. That is why this
+round is mostly two files plus a type and shape scale, rather than a pass over
+every layout.
+
+The colour resources keep their `md_` names. The spec lists token names without
+the prefix, and renaming them was considered and dropped: outside `themes.xml`
+and four lines of `StationAdapter`, nothing refers to them, so the rename buys
+nothing and touches everything.
+
+### The brand/primary split
+
+The one decision worth not undoing. The logo's `#A75B87` measures **4.27:1** on
+the light surface — fine for a large graphic, short of 4.5:1 for text. So the
+logo colour stays on artwork, and text and icons use `#964C74`, one ramp step
+deeper, at **5.35:1**. Flatten them back together and the contrast failure
+returns silently.
+
+Every ratio in both colour files was measured, against the surface the colour
+actually sits on rather than the nominal background — `on_surface_variant` on
+white is 6.32:1, not the 5.76:1 it scores on the surface. One figure in the
+plan needed correcting: `on_primary` is quoted at 6.41:1 against `#85476B`,
+which is a ramp step and not the primary token. Against the real primary it is
+**5.57:1** — still passing, so the token stands.
+
+### Two bugs in the plan's code, fixed rather than copied
+
+- `abs(id.hashCode()) % palettes.size` returns a **negative index** when the
+  hash is `Int.MIN_VALUE`, because `abs(Int.MIN_VALUE)` is still
+  `Int.MIN_VALUE`. One string in four billion crashes the tile bind, and the
+  ids come off a scraped page. `StationArt` uses `Math.floorMod`, and
+  `StationArtTest` pins the case with a string whose hash is exactly that.
+- `android.R.bool.config_reduceMotion` is an internal framework resource, not
+  public API; it does not compile. `Motion` reads
+  `Settings.Global.ANIMATOR_DURATION_SCALE`, which is what the accessibility
+  guidance actually points at.
+
+### Station artwork: fallback, not replacement
+
+The plan assumes no station imagery exists. It does — the catalogue scrapes a
+logo URL per station and Coil loads it. Generated art would have thrown that
+away. `StationArt` is instead the **placeholder and error** drawable, replacing
+the single generic glyph every station used to fall back to, which made a slow
+or broken row look like a list of duplicates. Deterministic per station id, so
+it does not flicker to a different colour on each bind.
+
+Initials are the first two letters of the first word, matching the mockups. The
+plan's code computes word initials while its own test asserts `"Ci"` for
+`"Citizen FM"`; the two disagree, and word initials give a grid of tiles all
+ending in F, because most names here are `<Name> FM <frequency>`.
+
+### The serif
+
+Substituted: the platform serif, not a bundled Lora. Bundling costs ~400KB and
+an OFL attribution obligation, and the argument for Lora was editorial feel at
+display sizes, which Noto Serif provides. Swapping Lora in later is three
+`fontFamily` lines in `type.xml`. Because nothing is bundled, the About screen
+needs no attribution line and the licence question the plan raises does not
+arise.
+
+Applied through `textAppearanceHeadlineSmall` and `textAppearanceTitleLarge`
+only. Everything at `titleMedium` and below stays sans — the spec's own rule,
+which its recordings-row entry then contradicts by asking for a 12.5sp serif.
+The rule won.
+
+### One theme, not two
+
+`values-night/themes.xml` is deleted. It redeclared all thirty-odd colour items
+identically to the light theme so that a single boolean could differ; every one
+of those colours already swapped through `values-night/colors.xml`. The boolean
+is now `@bool/window_light_system_bars`. Two copies of a theme that must stay
+identical is a drift bug waiting to happen, and this round would have been where
+it happened.
+
+### Version
+
+The ladder so far, and where it goes next:
+
+| Branch | Version | Code | What it is |
+|---|---|---|---|
+| rounds 1-3 | 2.0.0 | 2 | rebuild: every screen, recording, new `applicationId` |
+| round 4 (this one) | **2.1.0** | **3** | visual language only |
+| toolchain next | 2.2.0 | 4 | Media3, Cast, AGP/Gradle — see section 8 |
+
+**2.1.0**, `versionCode` 3. Minor rather than major: nothing about the app's
+shape or behaviour moved, it is the same product in a different skin.
+
+Worth being straight about what these numbers are. Nothing has been published,
+so neither 2.0.0 nor 2.1.0 has reached a user, and semver's contract - which is
+about what an upgrade does to someone already running the old version - is not
+engaged. They are build labels. The reason to have two rather than fold the UI
+round into 2.0.0 is narrow and practical: a tester holding both APKs can tell
+which is which, and the About screen says so. If that is not worth a second
+number, it is one line in `commit-changes.ps1` to collapse them.
+
+### Second pass, 15 September — "the new UI is not much visible"
+
+Reported after a device test in dark mode. Re-audited every layout against the
+spec. Two findings, both real.
+
+**The Settings cards were never restyled.** Six `MaterialCardView`s in
+`activity_settings.xml` were still `Widget.Material3.CardView.Filled` at 20dp
+with no outline. Every other screen had moved to the 14dp outlined card; this
+one was missed. Fixed.
+
+**The spec's dark palette collapsed on a real screen.** The Option A mockup is
+light-only — its dark values were derived on paper and never rendered. Measured
+against the palette they replaced:
+
+| Dark mode | before | spec | now |
+|---|---|---|---|
+| card vs background | 1.99:1 | **1.09:1** | 1.22:1 |
+| outline vs background | 5.87:1 | **1.37:1** | 1.82:1 |
+| selected chip vs background | — | 1.37:1 | 1.70:1 |
+| snackbar vs card | — | **1.04:1** | 1.40:1 |
+
+At 1.09:1 a card is not visibly a card; at 1.04:1 the snackbar was the same
+colour as the mini player it sits on. So in dark mode the user went from very
+prominent boxed cards to near-flat surfaces and a muted primary, which reads as
+"nothing changed" or "it got duller" — exactly what was reported. Six dark
+values are lifted just enough for each layer to read as a layer, every text pair
+still above 4.5:1; the reasoning sits in a comment at the top of
+`values-night/colors.xml` so nobody "tidies" them back.
+
+Light mode is where the design was actually drawn. The paper surface, the white
+cards on it, the serif titles and the 4:3.1 tiles are all unmistakable there.
+Dark is, by the spec's own framing, the secondary theme — quieter by design,
+now quiet rather than absent.
+
+**Confirmed implemented, per screen:** catalogue (search field, tiles, playing
+ring, badge, empty/offline states, retry button), mini player, full-screen
+player, recordings rows and dialog, settings (language first, cards), onboarding
+(plate, serif title, filled Next), About (serif title via the theme). Toolbar
+titles on every screen pick up the serif through `textAppearanceTitleLarge`.
+
+### Deliberately not done
+
+- **Frequency on tiles.** `RadioStation` carries id, name and logo; the
+  frequency lives in `StationDetails`, fetched per station when it is played.
+  Putting it on the catalogue means one request per tile — a behaviour change,
+  and out of scope.
+- **Skeleton shimmer.** Needs a loading view type in the adapter. Structural.
+  The existing loading state is a progress indicator.
+- **Screenshot tests.** Goldens have to be generated from a run. Adding the
+  dependency without them lands a red build; adding fabricated ones is worse.
+- **Pill-shaped active onboarding dot.** The dots are sized in Kotlin layout
+  params, so this needs a code change for a very small visual gain.
+- **Dropping the mini player's stop button.** The mockup has no stop in the
+  mini player. Removing it would leave no way to stop playback without opening
+  the full player — a functional regression dressed as a visual one.
+- **Buffering ring.** Kept as `CircularProgressIndicator` rather than a dashed
+  ring driven by a hand-rolled rotation: it already honours the animator scale,
+  so reduce-motion needs no special case.
+
+---
+
+## 6. It builds, and it runs — 15 September 2026
 
 `assembleStaging` succeeds: the release R8 pipeline, signed with the debug key.
 That closes the three things this section used to list.
@@ -210,11 +375,21 @@ That closes the three things this section used to list.
 - **`gradlew` is back.** Both wrapper scripts were regenerated, so CI and
   non-Windows checkouts can build.
 
-One thing to be clear about: a green `assembleStaging` proves the **keep rules
-survive R8**. It does not prove Cast works. `CastOptionsProvider` is resolved
-from a manifest string at runtime, so a stripped class throws on first launch,
-not at build time. `installStaging`, then play, record and cast, is still the
-check.
+**The device pass is done.** Reported 15 September: the app opens, playback
+works, recording works, Cast works, rotation survives, and the full-screen
+player works.
+
+Cast working is the one that mattered most. `CastOptionsProvider` is named only
+as a string in a manifest `<meta-data>`, so R8 cannot see the reference; if the
+keep rule were wrong the class would be stripped and
+`CastContext.getSharedInstance` would throw on first launch — never at build
+time, and never in a debug build, because debug does not run R8.
+
+That closes the keep-rule item **on the condition that the build tested was the
+staging one**. A debug APK exercising Cast proves the code is right and says
+nothing about the keep rules, since R8 never ran. If the tested build came from
+`installStaging`, the item is closed. If it came from `installDebug`, one more
+run of `installStaging` closes it.
 
 The JDK is worth recording: Gradle 8.13 supports up to Java 24, and current
 Android Studio bundles JBR 25. The Gradle JDK has to be set to 17 or 21 until
@@ -222,7 +397,7 @@ the AGP 9 / Gradle 9.6 migration below.
 
 ---
 
-## 6. Open items — how each is being closed
+## 7. Open items — how each is being closed
 
 **What has been verified by machine, and what has not.** The workspace this was
 written in still cannot mount the project folder — a Windows update of
@@ -258,10 +433,11 @@ debug key, so it installs without a release keystore.
 ./gradlew installStaging
 ```
 
-`assembleStaging` now passes, which means R8 runs clean and the keep rules parse.
-The remaining half is runtime: install it and exercise playback, recording, Cast
-and the station list. A stripped `CastOptionsProvider` fails on first launch, not
-during the build, so only that pass can close this item.
+`assembleStaging` passes, so R8 runs clean and the keep rules parse, and the
+device pass of 15 September exercised playback, recording and Cast without a
+crash on launch. Subject to the staging-versus-debug caveat in section 6, this
+item is closed: Cast reaching a receiver is exactly the signal that
+`CastOptionsProvider` survived minification.
 
 ### Swahili — reviewed and cleared
 
@@ -341,21 +517,38 @@ does that.
 
 ---
 
-## 7. Still open
+## 8. Still open
 
-- **Toolchain and dependency bumps.** Media3 1.3.1 → 1.11.x, Cast 21.5.0 → 22.x,
-  then AGP 8.11.1 → 9.4.0 with Gradle 8.13 → 9.6.0. One commit each, in that
-  order, AGP last — it is a migration with breaking changes, not a version bump,
-  and it is what lets the bundled JBR 25 be used directly.
+- **Toolchain and dependency bumps — the next branch, and its own release.**
+  Media3 1.3.1 → 1.11.x, Cast 21.5.0 → 22.x, then AGP 8.11.1 → 9.4.0 with
+  Gradle 8.13 → 9.6.0. One commit each, in that order, AGP last: it is a
+  migration with breaking changes, not a version bump, and it is what lets the
+  bundled JBR 25 be used directly instead of pinning the Gradle JDK to 17 or 21
+  by hand on every machine.
+
+  **That branch ends in its own release commit: 2.2.0, `versionCode` 4.** The
+  pattern for this repo is one release per branch, and it is deliberate — a
+  dependency branch is exactly the kind that looks inert and is not. Media3 owns
+  playback and the session the notification and Cast both hang off; a regression
+  there surfaces on a device, not in a build log. A separate version number is
+  what lets a tester say *which* build broke, and lets the branch be reverted as
+  one thing.
+
+  Nothing about the app's behaviour is meant to change, so minor rather than
+  major — the same reasoning as 2.1.0. The device pass in section 6 has to be
+  repeated in full on that branch, Cast included, because Media3 and Cast are
+  precisely what it exercises.
 - **No release keystore or signing config.** `staging` covers testing; a real
   release still needs one.
 - **The JDK is pinned by the toolchain, not by choice.** Gradle 8.13 tops out at
   Java 24; Android Studio now bundles JBR 25, so the Gradle JDK must be set to 17
   or 21 by hand on every machine. The AGP 9 / Gradle 9.6 upgrade above is what
   removes that.
-- **Nothing has been run on a device.** The build is green; the app has not been
-  opened. Playback, recording, Cast, rotation and the full-screen player are all
-  unexercised.
+- **The 15 September device pass did not cover the new visual language.** It
+  covered behaviour — playback, recording, Cast, rotation, the full-screen
+  player. Still unlooked-at on a real screen: every screen in dark mode, the
+  generated artwork fallback, and the app with the device's animation scale set
+  to off.
 - **No instrumentation tests.** The unit tests cover parsing, stream selection
   and file naming. The service, MediaStore writes and the Cast hand-off are
   untested.
