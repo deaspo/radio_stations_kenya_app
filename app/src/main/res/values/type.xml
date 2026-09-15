@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Mauve Editorial type scale.
+
+    Display, headline and title are serif; everything dense stays in the system
+    sans. The serif only earns its keep above 17sp - never set these on list
+    metadata, settings descriptions or buttons.
+
+    ON THE SERIF FACE: this uses the platform "serif" family (Noto Serif on
+    effectively every device), not a bundled font. That is a deliberate
+    substitution for Lora, and the reason is worth keeping: bundling a font adds
+    ~400KB to the APK and an OFL attribution obligation, and the spec's own
+    argument for Lora - editorial feel at display sizes - is satisfied by Noto
+    Serif at these sizes. To switch to Lora later, drop lora_semibold.ttf into
+    res/font/ and change the three android:fontFamily lines below to
+    @font/lora_semibold. Nothing else in the project refers to the face.
+-->
+<resources>
+
+    <style name="Text.App.Headline" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="android:fontFamily">serif</item>
+        <item name="fontFamily">serif</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Text.App.Title" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:fontFamily">serif</item>
+        <item name="fontFamily">serif</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- "ALL STATIONS", "NOW PLAYING" - sans, tracked out, upper -->
+    <style name="Text.App.Section" parent="TextAppearance.Material3.LabelLarge">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:letterSpacing">0.08</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="Text.App.BodySm" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="Text.App.Label" parent="TextAppearance.Material3.LabelLarge">
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="Text.App.Caption" parent="TextAppearance.Material3.LabelSmall">
+        <item name="android:textSize">11sp</item>
+    </style>
+</resources>
