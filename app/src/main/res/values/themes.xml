@@ -37,6 +37,15 @@
 
         <!-- Tokens Material has no role for -->
         <item name="colorLiveDot">@color/live_dot</item>
+        <item name="colorSurfaceRaised">@color/md_surface_raised</item>
+
+        <!--
+            Off in both themes. In dark, Material would otherwise tint every
+            elevated surface towards primary by its elevation, on top of the
+            tonal ladder in values-night/colors.xml - two systems deciding one
+            colour. The ladder is explicit; let it be the only one.
+        -->
+        <item name="elevationOverlayEnabled">false</item>
         <item name="colorSnackbarBg">@color/snackbar_bg</item>
         <item name="colorSnackbarOn">@color/snackbar_on</item>
         <item name="colorSnackbarAction">@color/snackbar_action</item>

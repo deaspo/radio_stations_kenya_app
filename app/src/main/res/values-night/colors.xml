@@ -1,67 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Mauve Editorial - dark tokens.
+    Mauve Editorial - dark.
 
-    The dark end of the same ramp as values/colors.xml, with identical names, so
-    every component keeps referencing tokens and neither theme needs its own
-    layout. No pure black and no pure white: #1B131A carries the mauve hue, and
-    on_surface stops at #F1E7EF.
+    Designed, not derived. The light theme is warm paper with white cards on it
+    and mauve ink; its layers separate by a luminance jump that dark cannot
+    copy, because there is no "white" to jump to. So dark separates by a
+    stepped tonal ladder instead, every step on the brand hue (OKLCH h=340,
+    low chroma so it reads as ink, not purple):
 
-    The art_* gradients are deliberately absent - station artwork does not change
+        surface          #1F111A   the page
+        surface_variant  #33212D   cards, rows, fields          1.21:1 vs page
+        surface_raised   #43303C   mini player, dialogs         1.50:1
+        snackbar_bg      #584351   the retry snackbar           2.03:1
+        outline          #614F5B   hairlines                    2.41:1
+
+    Each step is far enough from the one below to read as its own layer with no
+    outline doing the work, and the outline is a quiet hairline rather than the
+    thing that makes a card visible. Material's elevation overlay is switched off
+    in the theme so these are the colours that actually render.
+
+    Primary flips role. In light it is an ink (#964C74) on paper; in dark it is
+    a pale, genuinely saturated mauve (#E8A6D1) with deep plum text on it - the
+    brand kept alive at night rather than greyed out. Every text pair below is
+    measured at 5.4:1 or better; nothing is pure black or pure white.
+
+    The art_* gradients are absent on purpose: station artwork does not change
     with the theme, so it lives only in values/.
-
-    SIX VALUES HERE DEPART FROM THE SPEC, ON PURPOSE. The Option A mockup was
-    light-only; its dark values were derived on paper and never rendered. On a
-    device they collapse: the spec's card colour #251B23 sits at 1.09:1 against
-    the background, and its outline at 1.37:1, so cards stopped reading as cards
-    at all - down from 1.99:1 and 5.87:1 in the palette this replaced. The
-    surfaces below are lifted just enough that a card, a selected chip and the
-    snackbar each read as their own layer (1.22 / 1.70 / 1.70 against the
-    background), while every text pair stays above 4.5:1. Measured, not judged.
 -->
 <resources>
 
     <color name="brand_mauve">#A75B87</color>
 
-    <!-- primary: 10.55:1 on surface, 9.67:1 on surface_variant -->
-    <color name="md_primary">#DBBDCE</color>
-    <color name="md_on_primary">#3D1E32</color>
-    <color name="md_primary_container">#4E2C40</color>  <!-- playing tile; 1.52:1 vs surface -->
-    <color name="md_on_primary_container">#EDDEE7</color>
+    <!-- primary: 9.37:1 on surface, 7.74:1 on a card; on_primary 7.70:1 on it -->
+    <color name="md_primary">#E8A6D1</color>
+    <color name="md_on_primary">#3C1C32</color>
+    <color name="md_primary_container">#673257</color>   <!-- playing tile; 1.88:1 vs page -->
+    <color name="md_on_primary_container">#F7E1EE</color>
 
-    <color name="md_secondary">#B49DB0</color>
-    <color name="md_on_secondary">#21121B</color>
-    <color name="md_secondary_container">#4A3947</color>  <!-- selected chip; 1.70:1 -->
-    <color name="md_on_secondary_container">#EDDEE7</color>
+    <color name="md_secondary">#CCADC0</color>
+    <color name="md_on_secondary">#341F2D</color>
+    <color name="md_secondary_container">#4D3445</color> <!-- selected chip; 1.64:1 -->
+    <color name="md_on_secondary_container">#F1DEEA</color>
 
-    <color name="md_tertiary">#8C82B4</color>
-    <color name="md_on_tertiary">#21121B</color>
-    <color name="md_tertiary_container">#332F4D</color>
-    <color name="md_on_tertiary_container">#E5E0F2</color>
+    <color name="md_tertiary">#B6AFE8</color>
+    <color name="md_on_tertiary">#262041</color>
+    <color name="md_tertiary_container">#3D3564</color>
+    <color name="md_on_tertiary_container">#E7E5F8</color>
 
-    <!-- error: 10.71:1 on surface -->
+    <!-- Material's own dark error set; 10.72:1 on surface -->
     <color name="md_error">#FFB4AB</color>
-    <color name="md_on_error">#3B0F0A</color>
-    <color name="md_error_container">#332637</color>
+    <color name="md_on_error">#690005</color>
+    <color name="md_error_container">#93000A</color>
     <color name="md_on_error_container">#FFDAD6</color>
 
-    <color name="md_background">#1B131A</color>
-    <color name="md_on_background">#F1E7EF</color>
-    <color name="md_surface">#1B131A</color>
-    <color name="md_on_surface">#F1E7EF</color>
-    <color name="md_surface_variant">#30232D</color>  <!-- cards; 1.22:1 vs surface, text on it 5.98:1+ -->
-    <color name="md_on_surface_variant">#B49DB0</color>
-    <color name="md_surface_inverse">#F1E7EF</color>
-    <color name="md_on_surface_inverse">#251B23</color>
+    <color name="md_background">#1F111A</color>
+    <color name="md_on_background">#F1E8EE</color>
+    <color name="md_surface">#1F111A</color>
+    <color name="md_on_surface">#F1E8EE</color>
+    <color name="md_surface_variant">#33212D</color>
+    <color name="md_on_surface_variant">#BCA7B4</color> <!-- 8.08:1 on page, 5.40:1 on raised -->
+    <color name="md_surface_raised">#43303C</color>
+    <color name="md_surface_inverse">#F1E8EE</color>
+    <color name="md_on_surface_inverse">#33212D</color>
 
-    <color name="md_outline">#4F3D4B</color>  <!-- 1dp card border; 1.50:1 vs card -->
-    <color name="md_outline_variant">#3A2B38</color>
+    <color name="md_outline">#614F5B</color>
+    <color name="md_outline_variant">#42323D</color>
 
-    <color name="snackbar_bg">#4A3947</color>  <!-- a layer above the mini player, not the same colour as it -->
-    <color name="snackbar_on">#F1E7EF</color>
-    <color name="snackbar_action">#DBBDCE</color>
+    <color name="snackbar_bg">#584351</color>
+    <color name="snackbar_on">#F1E8EE</color>
+    <color name="snackbar_action">#F7C2E4</color>        <!-- 5.90:1 on snackbar_bg -->
 
-    <color name="live_dot">#E8A3C4</color>
+    <!-- brighter than the light dot on purpose: it has to glow, not sit -->
+    <color name="live_dot">#F084C4</color>
 
     <color name="md_scrim">#000000</color>
 

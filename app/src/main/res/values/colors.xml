@@ -51,6 +51,12 @@
     <!-- cards, fields, rows, mini player -->
     <color name="md_surface_variant">#FFFFFF</color>
     <color name="md_on_surface_variant">#6E5A68</color>
+    <!--
+        The mini player and dialogs. In light this is the same white as a card:
+        a 3dp shadow on paper does the separating. In dark there is no shadow to
+        see, so values-night gives it its own step on the tonal ladder.
+    -->
+    <color name="md_surface_raised">#FFFFFF</color>
     <color name="md_surface_inverse">#3A2A34</color>
     <color name="md_on_surface_inverse">#F4ECEF</color>
 
