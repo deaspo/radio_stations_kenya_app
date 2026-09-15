@@ -33,6 +33,34 @@
 
         <item name="colorOutline">@color/md_outline</item>
         <item name="colorOutlineVariant">@color/md_outline_variant</item>
+        <item name="android:colorEdgeEffect">@color/md_primary</item>
+
+        <!-- Tokens Material has no role for -->
+        <item name="colorLiveDot">@color/live_dot</item>
+        <item name="colorSnackbarBg">@color/snackbar_bg</item>
+        <item name="colorSnackbarOn">@color/snackbar_on</item>
+        <item name="colorSnackbarAction">@color/snackbar_action</item>
+
+        <!--
+            Editorial display face, applied through the two text roles that are
+            genuinely display-scale. titleMedium and below stay sans on purpose:
+            a serif in a dense list or a settings row is harder to read, not
+            more characterful.
+        -->
+        <item name="textAppearanceHeadlineSmall">@style/Text.App.Headline</item>
+        <item name="textAppearanceTitleLarge">@style/Text.App.Title</item>
+
+        <!-- Shape scale -->
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.App.Sm</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.App.Md</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.App.Lg</item>
+
+        <!-- Snackbar: container, text and action are three separate styles -->
+        <item name="snackbarStyle">@style/Widget.App.Snackbar</item>
+        <item name="snackbarTextViewStyle">@style/Widget.App.Snackbar.TextView</item>
+        <item name="snackbarButtonStyle">@style/Widget.App.Snackbar.Button</item>
+
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.Dialog</item>
 
         <!--
             targetSdk 36 means Android 15+ draws edge-to-edge and ignores
@@ -42,7 +70,8 @@
         -->
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">@bool/window_light_system_bars</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">@bool/window_light_system_bars</item>
     </style>
 
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
@@ -53,23 +82,6 @@
 
     <style name="Theme.KenyanRadioStations" parent="Base.Theme.KenyanRadioStations" />
 
-    <!-- Rounded corners for station artwork -->
-    <style name="ShapeAppearance.App.Logo" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">16dp</item>
-    </style>
-
-    <style name="ShapeAppearance.App.LogoSmall" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">12dp</item>
-    </style>
-
-    <!-- Full-screen player artwork -->
-    <style name="ShapeAppearance.App.Artwork" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">28dp</item>
-    </style>
-
     <!-- Mini player sits on the bottom edge: round only the top corners -->
     <style name="ShapeAppearance.App.PlayerSheet" parent="">
         <item name="cornerFamily">rounded</item>
@@ -79,12 +91,4 @@
         <item name="cornerSizeBottomRight">0dp</item>
     </style>
 
-    <!-- Section label above each settings card -->
-    <style name="TextAppearance.App.SectionHeader" parent="TextAppearance.Material3.LabelLarge">
-        <item name="android:textColor">?attr/colorPrimary</item>
-        <item name="android:paddingStart">20dp</item>
-        <item name="android:paddingEnd">20dp</item>
-        <item name="android:paddingTop">24dp</item>
-        <item name="android:paddingBottom">8dp</item>
-    </style>
 </resources>
