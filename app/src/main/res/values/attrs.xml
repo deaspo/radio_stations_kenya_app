@@ -8,6 +8,8 @@
 -->
 <resources>
     <attr name="colorLiveDot" format="color" />
+    <!-- One tonal step above a card: the mini player and dialogs. -->
+    <attr name="colorSurfaceRaised" format="color" />
     <attr name="colorSnackbarBg" format="color" />
     <attr name="colorSnackbarOn" format="color" />
     <attr name="colorSnackbarAction" format="color" />

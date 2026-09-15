@@ -95,6 +95,7 @@
 
     <style name="Widget.App.AlertDialog" parent="MaterialAlertDialog.Material3">
         <item name="shapeAppearance">@style/ShapeAppearance.App.Xl</item>
+        <item name="backgroundTint">?attr/colorSurfaceRaised</item>
     </style>
 
     <style name="Text.App.DialogTitle" parent="MaterialAlertDialog.Material3.Title.Text">
