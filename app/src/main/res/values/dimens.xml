@@ -45,4 +45,7 @@
     <dimen name="live_dot_size_tile">9dp</dimen>
     <dimen name="stroke_hairline">1dp</dimen>
     <dimen name="stroke_ring">2dp</dimen>
+
+    <!-- ===== Item Picture Paddings ===== -->
+    <dimen name="item_picture_padding">16dp</dimen>
 </resources>

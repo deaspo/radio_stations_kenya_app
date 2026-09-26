@@ -1,12 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
     Station tile.
 
     The artwork is 4:3.1 rather than square: station logos are overwhelmingly
     wordmarks, which a square crop cuts in half.
 -->
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/station_card"
@@ -26,6 +24,7 @@
             android:id="@+id/station_logo"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_margin="@dimen/item_picture_padding"
             android:scaleType="centerCrop"
             app:layout_constraintDimensionRatio="H,4:3.1"
             app:layout_constraintEnd_toEndOf="parent"
