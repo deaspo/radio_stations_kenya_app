@@ -1,39 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Material 3 dark colour roles. Previously the night theme reused the light
-     lavender primary, so dark mode was never actually dark-toned. -->
+<!--
+    Mauve Editorial - dark.
+
+    Designed, not derived. The light theme is warm paper with white cards on it
+    and mauve ink; its layers separate by a luminance jump that dark cannot
+    copy, because there is no "white" to jump to. So dark separates by a
+    stepped tonal ladder instead, every step on the brand hue (OKLCH h=340,
+    low chroma so it reads as ink, not purple):
+
+        surface          #1F111A   the page
+        surface_variant  #33212D   cards, rows, fields          1.21:1 vs page
+        surface_raised   #43303C   mini player, dialogs         1.50:1
+        snackbar_bg      #584351   the retry snackbar           2.03:1
+        outline          #614F5B   hairlines                    2.41:1
+
+    Each step is far enough from the one below to read as its own layer with no
+    outline doing the work, and the outline is a quiet hairline rather than the
+    thing that makes a card visible. Material's elevation overlay is switched off
+    in the theme so these are the colours that actually render.
+
+    Primary flips role. In light it is an ink (#964C74) on paper; in dark it is
+    a pale, genuinely saturated mauve (#E8A6D1) with deep plum text on it - the
+    brand kept alive at night rather than greyed out. Every text pair below is
+    measured at 5.4:1 or better; nothing is pure black or pure white.
+
+    The art_* gradients are absent on purpose: station artwork does not change
+    with the theme, so it lives only in values/.
+-->
 <resources>
 
-    <color name="md_primary">#FFB0CF</color>
-    <color name="md_on_primary">#4E1F38</color>
-    <color name="md_primary_container">#68364F</color>
-    <color name="md_on_primary_container">#FFD8E8</color>
+    <color name="brand_mauve">#A75B87</color>
 
-    <color name="md_secondary">#DBC0CA</color>
-    <color name="md_on_secondary">#3E2B34</color>
-    <color name="md_secondary_container">#56414A</color>
-    <color name="md_on_secondary_container">#F8DEE8</color>
+    <!-- primary: 9.37:1 on surface, 7.74:1 on a card; on_primary 7.70:1 on it -->
+    <color name="md_primary">#E8A6D1</color>
+    <color name="md_on_primary">#3C1C32</color>
+    <color name="md_primary_container">#673257</color>   <!-- playing tile; 1.88:1 vs page -->
+    <color name="md_on_primary_container">#F7E1EE</color>
 
-    <color name="md_tertiary">#F0BC94</color>
-    <color name="md_on_tertiary">#48290D</color>
-    <color name="md_tertiary_container">#623F21</color>
-    <color name="md_on_tertiary_container">#FFDCC2</color>
+    <color name="md_secondary">#CCADC0</color>
+    <color name="md_on_secondary">#341F2D</color>
+    <color name="md_secondary_container">#4D3445</color> <!-- selected chip; 1.64:1 -->
+    <color name="md_on_secondary_container">#F1DEEA</color>
 
-    <color name="md_error">#F2B8B5</color>
-    <color name="md_on_error">#601410</color>
-    <color name="md_error_container">#8C1D18</color>
-    <color name="md_on_error_container">#F9DEDC</color>
+    <color name="md_tertiary">#B6AFE8</color>
+    <color name="md_on_tertiary">#262041</color>
+    <color name="md_tertiary_container">#3D3564</color>
+    <color name="md_on_tertiary_container">#E7E5F8</color>
 
-    <color name="md_background">#171215</color>
-    <color name="md_on_background">#ECDFE3</color>
-    <color name="md_surface">#171215</color>
-    <color name="md_on_surface">#ECDFE3</color>
-    <color name="md_surface_variant">#4F444A</color>
-    <color name="md_on_surface_variant">#D3C2C9</color>
-    <color name="md_surface_inverse">#ECDFE3</color>
-    <color name="md_on_surface_inverse">#352F31</color>
+    <!-- Material's own dark error set; 10.72:1 on surface -->
+    <color name="md_error">#FFB4AB</color>
+    <color name="md_on_error">#690005</color>
+    <color name="md_error_container">#93000A</color>
+    <color name="md_on_error_container">#FFDAD6</color>
 
-    <color name="md_outline">#9C8D95</color>
-    <color name="md_outline_variant">#4F444A</color>
+    <color name="md_background">#1F111A</color>
+    <color name="md_on_background">#F1E8EE</color>
+    <color name="md_surface">#1F111A</color>
+    <color name="md_on_surface">#F1E8EE</color>
+    <color name="md_surface_variant">#33212D</color>
+    <color name="md_on_surface_variant">#BCA7B4</color> <!-- 8.08:1 on page, 5.40:1 on raised -->
+    <color name="md_surface_raised">#43303C</color>
+    <color name="md_surface_inverse">#F1E8EE</color>
+    <color name="md_on_surface_inverse">#33212D</color>
+
+    <color name="md_outline">#614F5B</color>
+    <color name="md_outline_variant">#42323D</color>
+
+    <color name="snackbar_bg">#584351</color>
+    <color name="snackbar_on">#F1E8EE</color>
+    <color name="snackbar_action">#F7C2E4</color>        <!-- 5.90:1 on snackbar_bg -->
+
+    <!-- brighter than the light dot on purpose: it has to glow, not sit -->
+    <color name="live_dot">#F084C4</color>
+
+    <color name="md_scrim">#000000</color>
 
     <color name="splash_background">#FFFFFF</color>
 </resources>

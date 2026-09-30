@@ -5,11 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    style="@style/Widget.Material3.CardView.Filled"
-    android:layout_marginBottom="8dp"
+    style="@style/Widget.App.Card"
+    android:layout_marginBottom="7dp"
     android:clickable="true"
-    android:focusable="true"
-    app:cardCornerRadius="16dp">
+    android:focusable="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -43,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:maxLines="1"
-                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textAppearance="@style/Text.App.Caption"
                 android:textColor="?attr/colorOnSurfaceVariant"
                 tools:text="13 Sep 2026, 14:32 · 28.4 MB" />
         </LinearLayout>
@@ -69,6 +68,7 @@
             android:insetTop="0dp"
             android:insetBottom="0dp"
             app:icon="@drawable/ic_delete"
+            app:iconTint="?attr/colorError"
             app:iconPadding="0dp"
             app:iconSize="20dp" />
     </LinearLayout>

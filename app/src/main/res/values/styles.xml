@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Component styles for Mauve Editorial. Every value here resolves through a
+    theme attribute, so values-night needs no copy of this file.
+-->
+<resources>
+
+    <!-- ===== Shape scale ===== -->
+
+    <style name="ShapeAppearance.App.Xs" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/shape_xs</item>
+    </style>
+
+    <style name="ShapeAppearance.App.Sm" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/shape_sm</item>
+    </style>
+
+    <style name="ShapeAppearance.App.Md" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/shape_md</item>
+    </style>
+
+    <style name="ShapeAppearance.App.Lg" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/shape_lg</item>
+    </style>
+
+    <style name="ShapeAppearance.App.Xl" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/shape_xl</item>
+    </style>
+
+    <!--
+        Station artwork sits flush in the top of the tile, so only its top
+        corners are rounded - a fully rounded image inside a rounded card leaves
+        two visible slivers of card at the top edge.
+    -->
+    <style name="ShapeAppearance.App.ArtTop" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">@dimen/shape_md</item>
+        <item name="cornerSizeTopRight">@dimen/shape_md</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
+
+    <!-- ===== Buttons ===== -->
+
+    <!-- Full-width "Next" / "Accept" / "Refresh" -->
+    <style name="Widget.App.FilledButton" parent="Widget.Material3.Button">
+        <item name="cornerRadius">@dimen/shape_sm</item>
+        <item name="android:minHeight">@dimen/touch_target</item>
+        <item name="android:textAppearance">@style/Text.App.Label</item>
+    </style>
+
+    <!-- ===== Cards ===== -->
+
+    <style name="Widget.App.Card" parent="Widget.Material3.CardView.Filled">
+        <item name="cardBackgroundColor">?attr/colorSurfaceVariant</item>
+        <item name="cardCornerRadius">@dimen/shape_md</item>
+        <item name="cardElevation">@dimen/elev_1</item>
+        <item name="strokeColor">?attr/colorOutline</item>
+        <item name="strokeWidth">@dimen/stroke_hairline</item>
+    </style>
+
+    <!-- ===== Snackbar =====
+         Three styles, because one is not enough: the container carries the
+         background, the text view carries the text colour, and the action is a
+         separate button. Setting android:textColor on the container alone does
+         nothing, which is the usual way this gets written and stays broken. -->
+
+    <style name="Widget.App.Snackbar" parent="Widget.Material3.Snackbar">
+        <item name="backgroundTint">?attr/colorSnackbarBg</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.App.Xs</item>
+    </style>
+
+    <style name="Widget.App.Snackbar.TextView" parent="Widget.Material3.Snackbar.TextView">
+        <item name="android:textColor">?attr/colorSnackbarOn</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="Widget.App.Snackbar.Button" parent="Widget.Material3.Button.TextButton.Snackbar">
+        <item name="android:textColor">?attr/colorSnackbarAction</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- ===== Dialogs ===== -->
+
+    <style name="ThemeOverlay.App.Dialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="alertDialogStyle">@style/Widget.App.AlertDialog</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/Text.App.DialogTitle</item>
+    </style>
+
+    <style name="Widget.App.AlertDialog" parent="MaterialAlertDialog.Material3">
+        <item name="shapeAppearance">@style/ShapeAppearance.App.Xl</item>
+        <item name="backgroundTint">?attr/colorSurfaceRaised</item>
+    </style>
+
+    <style name="Text.App.DialogTitle" parent="MaterialAlertDialog.Material3.Title.Text">
+        <item name="android:fontFamily">serif</item>
+        <item name="fontFamily">serif</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- ===== Section label above each settings card ===== -->
+
+    <style name="TextAppearance.App.SectionHeader" parent="@style/Text.App.Section">
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
+        <item name="android:paddingTop">24dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+</resources>

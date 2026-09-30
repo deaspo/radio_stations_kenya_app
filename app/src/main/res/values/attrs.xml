@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Theme attributes for the tokens Material does not already have a role for.
+
+    Declaring them as attrs rather than referencing @color/... directly is what
+    lets a drawable or layout stay theme-agnostic: values-night swaps the colour
+    underneath and nothing else changes.
+-->
+<resources>
+    <attr name="colorLiveDot" format="color" />
+    <!-- One tonal step above a card: the mini player and dialogs. -->
+    <attr name="colorSurfaceRaised" format="color" />
+    <attr name="colorSnackbarBg" format="color" />
+    <attr name="colorSnackbarOn" format="color" />
+    <attr name="colorSnackbarAction" format="color" />
+</resources>

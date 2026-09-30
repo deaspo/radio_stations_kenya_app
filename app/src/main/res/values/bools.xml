@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The only thing that genuinely differs between the two themes beyond colour.
+    Keeping it here, rather than in a values-night copy of the whole theme, is
+    what lets there be exactly one theme definition: every colour role already
+    swaps through values-night/colors.xml, so a second themes.xml only existed
+    to restate 30 identical lines and drift out of step with them.
+-->
+<resources>
+    <bool name="window_light_system_bars">true</bool>
+</resources>

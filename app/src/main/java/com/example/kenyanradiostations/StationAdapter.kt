@@ -81,10 +81,15 @@ class StationAdapter(
             binding.stationName.text = station.name
             binding.stationLogo.contentDescription =
                 context.getString(R.string.station_logo_of, station.name)
+            // Generated art rather than the single generic radio glyph: with one
+            // shared fallback, a slow or broken row reads as a list of
+            // duplicates. StationArt is deterministic, so this does not flicker
+            // to a different colour on every bind.
+            val fallback = StationArt.forStation(context, station.id, station.name)
             binding.stationLogo.load(station.logoUrl) {
                 crossfade(true)
-                placeholder(R.drawable.ic_radio_icon)
-                error(R.drawable.ic_radio_icon)
+                placeholder(fallback)
+                error(fallback)
             }
 
             binding.root.contentDescription =
@@ -115,6 +120,7 @@ class StationAdapter(
             )
 
             binding.nowPlayingBadge.visibility = if (isPlaying) View.VISIBLE else View.GONE
+            binding.playingRing.visibility = if (isPlaying) View.VISIBLE else View.GONE
             binding.root.setCardBackgroundColor(
                 ContextCompat.getColor(
                     context,
@@ -127,6 +133,9 @@ class StationAdapter(
 
         /** Slow blink on the live dot, so the playing tile is obvious mid-scroll. */
         fun startPulse() {
+            // The dot is decorative - "Now playing" is spelled out beside it -
+            // so dropping the animation costs no information.
+            if (Motion.isReduced(binding.root.context)) return
             if (binding.nowPlayingDot.animation != null) return
             binding.nowPlayingDot.startAnimation(
                 AlphaAnimation(1f, 0.25f).apply {

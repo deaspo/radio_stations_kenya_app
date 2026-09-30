@@ -1,13 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
     The full-screen player.
 
     The artwork is sized by a 1:1 ratio inside whatever space is left between
     the top bar and the metadata, capped at 280dp, so the same layout survives
     landscape and small screens without a second resource folder.
 -->
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/player_root"
@@ -47,6 +45,7 @@
         android:background="?attr/colorSurfaceVariant"
         android:contentDescription="@string/player_artwork"
         android:scaleType="centerCrop"
+        app:contentPadding="@dimen/item_picture_padding"
         app:layout_constrainedHeight="true"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toTopOf="@id/station_name"
@@ -56,7 +55,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_collapse"
         app:layout_constraintWidth_max="280dp"
-        app:shapeAppearanceOverlay="@style/ShapeAppearance.App.Artwork"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.App.Xl"
         tools:src="@tools:sample/avatars" />
 
     <TextView
@@ -73,7 +72,7 @@
         android:textAppearance="?attr/textAppearanceLabelSmall"
         android:textColor="?attr/colorOnPrimary"
         android:visibility="gone"
-        app:drawableStartCompat="@drawable/bg_live_dot"
+        app:drawableStartCompat="@drawable/bg_live_dot_on_primary"
         app:layout_constraintBottom_toTopOf="@id/station_name"
         app:layout_constraintStart_toStartOf="parent"
         tools:visibility="visible" />
@@ -144,16 +143,16 @@
         android:id="@+id/button_play_pause"
         style="@style/Widget.Material3.Button.IconButton.Filled"
         android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_height="72dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="24dp"
         android:contentDescription="@string/player_play"
         android:insetTop="0dp"
         android:insetBottom="0dp"
         app:icon="@drawable/ic_play"
         app:iconPadding="0dp"
-        app:iconSize="36dp"
+        app:iconSize="50dp"
         app:layout_constraintBottom_toTopOf="@id/button_stop"
         app:layout_constraintEnd_toStartOf="@id/button_record"
         app:layout_constraintStart_toEndOf="@id/button_favourite" />
@@ -165,7 +164,7 @@
         android:indeterminate="true"
         android:visibility="gone"
         app:indicatorInset="0dp"
-        app:indicatorSize="80dp"
+        app:indicatorSize="72dp"
         app:layout_constraintBottom_toBottomOf="@id/button_play_pause"
         app:layout_constraintEnd_toEndOf="@id/button_play_pause"
         app:layout_constraintStart_toStartOf="@id/button_play_pause"
@@ -195,6 +194,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        android:minHeight="@dimen/touch_target"
         android:text="@string/player_stop"
         app:icon="@drawable/ic_stop"
         app:layout_constraintBottom_toBottomOf="parent"

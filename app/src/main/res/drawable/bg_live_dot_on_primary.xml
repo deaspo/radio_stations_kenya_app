@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The live dot when it sits INSIDE a primary-coloured pill - the tile badge
+    and the full-screen player's live badge. colorLiveDot is a pink on the same
+    hue as primary, so on a primary background it vanishes (about 1.5:1 in both
+    themes). On a pill the dot takes the pill's own text colour instead.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="?attr/colorOnPrimary" />
+    <size
+        android:width="8dp"
+        android:height="8dp" />
+</shape>
